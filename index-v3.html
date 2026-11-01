@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Варим кофе — кофе 2GO в Ташкенте</title>
+<meta name="description" content="Варим кофе в Ташкенте. А чё не варить-то? Кофе 2GO, авторские лимонады, вафли и ПП гранола. 4 точки в городе, ежедневно с 08:00 до 23:00.">
+<meta name="theme-color" content="#111111">
+<meta property="og:title" content="Варим кофе — кофе 2GO в Ташкенте">
+<meta property="og:description" content="4 точки в городе. Кофе, лимонады, вафли. Ежедневно 08:00–23:00.">
+<meta property="og:image" content="assets/logo.jpg">
+<link rel="icon" href="assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/p/hero.jpg">
+<style>
+:root{
+ --y:#FFD400;--y-soft:#FFF3B0;--k:#0f0f0f;--k2:#181818;--k3:#222;--cream:#F6F1E7;--line:#ffffff1a;
+ --ease:cubic-bezier(.22,1,.36,1);--r-lg:36px;--r-md:22px;--shadow:0 30px 80px -20px #0009
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{font-family:Montserrat,system-ui,sans-serif;background:var(--k);color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-weight:500}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+img,video{display:block;max-width:100%}
+svg.i{width:1.15em;height:1.15em;flex:none;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+::selection{background:var(--y);color:var(--k)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+.h1,.h2{font-weight:900;letter-spacing:-.035em;line-height:.95;text-transform:uppercase}
+.h2{font-size:clamp(36px,5.2vw,76px)}
+.h2 em,.h1 em{font-style:normal;color:var(--y)}
+.kicker{display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--y)}
+.kicker:before{content:"";width:28px;height:2px;background:currentColor;border-radius:2px}
+.dark-k{color:var(--k)}
+
+/* split words */
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.w>span{display:inline-block;will-change:transform}
+
+/* grain + progress + cursor */
+.grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.055;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+#progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--y);transform-origin:0 50%;transform:scaleX(0);z-index:95}
+.cursor,.cursor-dot{position:fixed;top:0;left:0;pointer-events:none;z-index:99;border-radius:50%}
+.cursor{width:38px;height:38px;border:1.5px solid #ffffff80;transition:width .35s var(--ease),height .35s var(--ease),background .35s,border-color .35s;display:grid;place-items:center;mix-blend-mode:difference}
+.cursor span{font-size:11px;font-weight:800;letter-spacing:.12em;color:#000;opacity:0;transition:.2s}
+.cursor.hover{width:64px;height:64px;background:#fff;border-color:#fff}
+.cursor.label{width:92px;height:92px;background:var(--y);border-color:var(--y);mix-blend-mode:normal}
+.cursor.label span{opacity:1}
+.cursor-dot{width:6px;height:6px;background:var(--y)}
+@media (hover:none),(max-width:900px){.cursor,.cursor-dot{display:none}}
+
+/* loader */
+#loader{position:fixed;inset:0;z-index:100;background:var(--y);color:var(--k);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+#loader img{width:116px;height:116px;border-radius:50%;box-shadow:0 20px 50px #0003}
+#loader .num{font-weight:900;font-size:64px;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+#loader .cap{font-weight:700;font-size:12px;letter-spacing:.3em;text-transform:uppercase;opacity:.6}
+
+/* buttons */
+.btn{--bg:var(--y);--fg:var(--k);position:relative;display:inline-flex;align-items:center;gap:12px;height:58px;padding:0 28px;border-radius:99px;border:0;background:var(--bg);color:var(--fg);font-weight:800;font-size:15px;letter-spacing:.01em;cursor:pointer;overflow:hidden;isolation:isolate;transition:color .4s,box-shadow .5s var(--ease);white-space:nowrap}
+.btn:before{content:"";position:absolute;inset:0;background:#fff;border-radius:inherit;transform:translateY(101%);transition:transform .55s var(--ease);z-index:-1}
+.btn:hover:before{transform:none}
+.btn:hover{box-shadow:0 18px 40px -12px #ffd40088}
+.btn .arr{width:32px;height:32px;border-radius:50%;background:var(--k);color:var(--y);display:grid;place-items:center;margin-right:-16px;overflow:hidden;position:relative}
+.btn .arr svg{transition:transform .5s var(--ease);grid-area:1/1}
+.btn .arr svg+svg{transform:translateX(-160%)}
+.btn:hover .arr svg:first-child{transform:translateX(160%)}
+.btn:hover .arr svg+svg{transform:none}
+.btn.ghost{--bg:transparent;--fg:#fff;box-shadow:inset 0 0 0 1.5px #ffffff3d}
+.btn.ghost:before{background:var(--y)}
+.btn.ghost:hover{color:var(--k);box-shadow:inset 0 0 0 1.5px var(--y)}
+.btn.dark{--bg:var(--k);--fg:#fff}
+.btn.dark:before{background:#fff}
+.btn.dark:hover{color:var(--k);box-shadow:0 18px 40px -12px #0006}
+.btn.sm{height:46px;padding:0 20px;font-size:14px}
+.ibtn{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;border:1.5px solid #ffffff2e;background:transparent;color:#fff;cursor:pointer;transition:background .4s var(--ease),border-color .4s,color .4s}
+.ibtn:hover{background:var(--y);border-color:var(--y);color:var(--k)}
+.ibtn svg{width:20px;height:20px}
+
+/* nav */
+nav{position:fixed;inset:0 0 auto;z-index:50;transition:transform .6s var(--ease)}
+nav.hide{transform:translateY(-120%)}
+nav .bar{margin:14px auto 0;max-width:1260px;padding:0 18px}
+nav .in{display:flex;align-items:center;justify-content:space-between;height:70px;padding:0 10px;border-radius:99px;transition:background .4s,box-shadow .4s}
+nav.solid .in{background:#141414d9;backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:inset 0 0 0 1px #ffffff12,0 20px 40px -20px #000c}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;font-size:14px;line-height:1.02;letter-spacing:.02em}
+.brand img{width:50px;height:50px;border-radius:50%}
+.links{display:flex;gap:4px}
+.links a{position:relative;padding:11px 18px;font-size:14px;font-weight:600;color:#d6d6d6;border-radius:99px;transition:.3s}
+.links a:hover{color:#fff;background:#ffffff10}
+.links a.on{color:var(--k);background:var(--y)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.lang{display:flex;padding:4px;border-radius:99px;box-shadow:inset 0 0 0 1px #ffffff20;position:relative}
+.lang button{position:relative;z-index:1;width:42px;height:36px;border:0;background:none;color:#bbb;font-weight:800;font-size:12px;cursor:pointer;border-radius:99px;transition:color .3s}
+.lang button.on{color:var(--k)}
+.lang i{position:absolute;top:4px;left:4px;width:42px;height:36px;border-radius:99px;background:var(--y);transition:transform .45s var(--ease)}
+.lang.uz i{transform:translateX(42px)}
+.burger{display:none;width:48px;height:48px;border-radius:50%;background:var(--y);border:0;cursor:pointer;position:relative}
+.burger i{position:absolute;left:15px;width:18px;height:2px;background:var(--k);border-radius:2px;transition:.4s var(--ease)}
+.burger i:first-child{top:19px}.burger i:last-child{top:27px}
+body.menu-open .burger i:first-child{top:23px;transform:rotate(45deg)}
+body.menu-open .burger i:last-child{top:23px;transform:rotate(-45deg)}
+.mmenu{position:fixed;inset:0;z-index:45;background:var(--y);color:var(--k);clip-path:circle(0 at calc(100% - 52px) 48px);transition:clip-path .8s var(--ease);display:flex;flex-direction:column;justify-content:flex-end;padding:120px 24px 40px;visibility:hidden}
+body.menu-open .mmenu{clip-path:circle(150% at calc(100% - 52px) 48px);visibility:visible}
+.mmenu a.big{font-weight:900;font-size:12.5vw;line-height:1.08;letter-spacing:-.04em;text-transform:uppercase;display:block}
+.mmenu .row{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+.mmenu .ibtn{border-color:#0003;color:var(--k)}
+
+/* hero */
+section{position:relative}
+.hero{min-height:100svh;display:flex;align-items:center;padding:130px 0 80px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;width:100%}
+.hero .h1{font-size:clamp(46px,6.1vw,92px);margin:26px 0 28px}
+.hero .lead{font-size:clamp(16px,1.35vw,19px);line-height:1.6;color:#c9c9c9;max-width:470px}
+.hero .cta{display:flex;gap:12px;margin-top:38px;flex-wrap:wrap}
+.trust{display:flex;gap:30px;margin-top:48px;flex-wrap:wrap}
+.trust .t{display:flex;align-items:center;gap:12px}
+.trust .ic{width:46px;height:46px;border-radius:15px;background:#ffffff0d;box-shadow:inset 0 0 0 1px #ffffff14;display:grid;place-items:center;color:var(--y)}
+.trust .ic svg{width:21px;height:21px}
+.trust b{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px}
+.trust small{display:block;color:#9a9a9a;font-size:12.5px;font-weight:600;margin-top:3px}
+.stars{display:inline-flex;gap:2px;color:var(--y)}
+.stars svg{width:12px;height:12px;fill:currentColor}
+.live{display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 14px;border-radius:99px;background:#ffffff0d;box-shadow:inset 0 0 0 1px #ffffff17;font-size:13px;font-weight:700}
+.pulse{width:9px;height:9px;border-radius:50%;background:#2fd36e;position:relative}
+.pulse:after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid #2fd36e;animation:ping 1.8s var(--ease) infinite}
+.pulse.off{background:#ff5d5d}.pulse.off:after{border-color:#ff5d5d}
+@keyframes ping{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
+
+.stage{position:relative;height:min(76vh,690px);display:flex;justify-content:center;align-items:center}
+.phone{position:relative;height:100%;aspect-ratio:9/16;border-radius:40px;overflow:hidden;box-shadow:var(--shadow),0 0 0 10px #1a1a1a,0 0 0 11px #ffffff1c;transform:rotate(3deg);background:#222 center/cover}
+.phone video{width:100%;height:100%;object-fit:cover}
+.phone:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0006 0,transparent 22%,transparent 66%,#000b 100%);pointer-events:none}
+.phone .tag{position:absolute;top:18px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2;font-size:11.5px;font-weight:700}
+.phone .tag>span{display:flex;align-items:center;gap:8px;background:#0008;backdrop-filter:blur(8px);padding:7px 12px;border-radius:99px}
+.rec{width:8px;height:8px;border-radius:50%;background:#ff3b3b;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.phone .cap{position:absolute;left:22px;right:22px;bottom:22px;z-index:2}
+.phone .cap b{font-size:21px;font-weight:900;display:block;letter-spacing:-.02em}
+.phone .cap small{font-size:13px;color:#ddd;font-weight:600}
+.badge-rot{position:absolute;width:150px;height:150px;right:-4%;top:4%;z-index:5}
+.badge-rot svg.ring{width:100%;height:100%;animation:spin 18s linear infinite}
+.badge-rot text{font-weight:800;font-size:11px;letter-spacing:.2em;fill:var(--k)}
+.badge-rot .core{position:absolute;inset:32px;border-radius:50%;overflow:hidden;box-shadow:0 10px 30px #0006}
+.badge-rot .core img{width:100%;height:100%}
+.badge-rot .bg{fill:var(--y)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.price-tag{position:absolute;right:-8%;bottom:18%;z-index:5;background:#fff;color:var(--k);border-radius:20px;padding:12px 18px 12px 12px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:center;transform:rotate(-4deg)}
+.price-tag .ic{width:44px;height:44px;border-radius:14px;background:var(--y);display:grid;place-items:center}
+.price-tag .ic svg{width:22px;height:22px}
+.price-tag b{display:block;font-weight:900;font-size:18px}
+.price-tag small{font-size:11px;color:#777;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+#cup3d{position:absolute;left:-60%;top:-12%;width:160%;height:124%;z-index:4;pointer-events:none}
+
+.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#888}
+.scroll-cue .m{width:22px;height:34px;border-radius:12px;box-shadow:inset 0 0 0 1.5px #666;position:relative}
+.scroll-cue .m:after{content:"";position:absolute;left:50%;top:7px;width:3px;height:7px;border-radius:2px;background:var(--y);transform:translateX(-50%);animation:wheel 1.8s var(--ease) infinite}
+@keyframes wheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,12px)}}
+
+/* marquee */
+.mq{position:relative;z-index:2;padding:40px 0;overflow:hidden}
+.mq .row{display:flex;width:max-content;padding:18px 0;font-weight:900;font-size:clamp(26px,3.6vw,52px);letter-spacing:-.02em;text-transform:uppercase;will-change:transform}
+.mq .row span{display:flex;align-items:center;gap:34px;padding-right:34px;white-space:nowrap}
+.mq .row img{width:.95em;height:.95em;border-radius:50%}
+.mq .a{background:var(--y);color:var(--k)}
+.mq .b{background:var(--k2);color:#fff;margin-top:-10px;box-shadow:inset 0 0 0 1px #ffffff12}
+.mq .b span{-webkit-text-stroke:1.5px #fff;color:transparent}
+
+/* about */
+.about{padding:150px 0 140px}
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+.collage{position:relative;height:660px}
+.collage .v{position:absolute;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);background:#222 center/cover}
+.collage .v video{width:100%;height:100%;object-fit:cover}
+.collage .v1{left:0;top:0;width:62%;aspect-ratio:9/16}
+.collage .v2{right:0;bottom:0;width:46%;aspect-ratio:9/16;box-shadow:var(--shadow),0 0 0 8px var(--k)}
+.collage .stamp{position:absolute;left:46%;top:42%;z-index:3;background:var(--y);color:var(--k);font-weight:900;border-radius:20px;padding:14px 18px;transform:rotate(-8deg);font-size:16px;line-height:1.1;box-shadow:var(--shadow);display:flex;gap:12px;align-items:center}
+.collage .stamp svg{width:26px;height:26px}
+.collage .stamp small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.14em;opacity:.65;margin-bottom:3px;text-transform:uppercase}
+.about p.body{color:#bdbdbd;font-size:17.5px;line-height:1.75;margin-top:28px;max-width:540px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
+.stat{border-radius:var(--r-md);padding:22px;background:var(--k2);box-shadow:inset 0 0 0 1px #ffffff10;display:flex;gap:14px;align-items:flex-start;transition:box-shadow .5s var(--ease),translate .5s var(--ease)}
+.stat:hover{translate:0 -4px;box-shadow:inset 0 0 0 1px #ffd40066}
+.stat .ic{width:44px;height:44px;border-radius:14px;background:#ffd4001a;color:var(--y);display:grid;place-items:center;flex:none}
+.stat .ic svg{width:21px;height:21px}
+.stat b{font-weight:900;font-size:30px;letter-spacing:-.03em;line-height:1;display:block}
+.stat span{font-size:13px;color:#9b9b9b;font-weight:600;margin-top:6px;display:block}
+
+/* process */
+.process{padding:20px 0 150px}
+.process .head,.menu .head,.reels .head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.process .head p{max-width:380px;color:#a8a8a8;line-height:1.65}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+.step{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:9/14;background:#222 center/cover;cursor:pointer;isolation:isolate}
+.step video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.step:hover video{transform:scale(1.06)}
+.step:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0000 38%,#000d);z-index:1}
+.step .n{position:absolute;top:20px;left:20px;z-index:2;font-weight:900;font-size:15px;background:var(--y);color:var(--k);width:48px;height:48px;border-radius:50%;display:grid;place-items:center}
+.step .tx{position:absolute;left:24px;right:24px;bottom:24px;z-index:2}
+.step h3{font-weight:900;font-size:24px;letter-spacing:-.02em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.step h3 svg{width:22px;height:22px;color:var(--y);transition:transform .5s var(--ease)}
+.step:hover h3 svg{transform:translateX(6px)}
+.step p{color:#d0d0d0;font-size:14.5px;line-height:1.6;margin-top:10px;max-height:0;overflow:hidden;opacity:0;transition:max-height .7s var(--ease),opacity .5s}
+.step:hover p,.step.open p{max-height:120px;opacity:1}
+
+/* menu */
+.menu{background:var(--cream);color:var(--k);padding:140px 0 120px;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.places .h2 em{color:var(--y);background:var(--k);padding:0 .12em;border-radius:.12em}
+.menu .h2 em{color:var(--k);background:var(--y);padding:0 .12em;border-radius:.12em}
+.tabs{display:flex;gap:4px;padding:6px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px #0000000f;position:relative}
+.tabs button{position:relative;z-index:1;display:flex;align-items:center;gap:9px;height:48px;padding:0 20px;border:0;background:none;border-radius:99px;font-weight:700;font-size:14px;color:#555;cursor:pointer;transition:color .35s;white-space:nowrap}
+.tabs button:hover{color:var(--k)}
+.tabs button.on{color:var(--y)}
+.tabs button svg{width:19px;height:19px}
+.tabs .pill{position:absolute;top:6px;left:0;height:48px;border-radius:99px;background:var(--k);transition:transform .55s var(--ease),width .55s var(--ease)}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:50px}
+.mcard{position:relative;background:#fff;border-radius:26px;padding:22px 22px 20px;min-height:220px;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;transition:translate .6s var(--ease),box-shadow .6s var(--ease)}
+.mcard:before{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--y);transform:scaleX(0);transform-origin:0 50%;transition:transform .6s var(--ease)}
+.mcard:hover{translate:0 -6px;box-shadow:0 30px 50px -24px #0000004d}
+.mcard:hover:before{transform:none}
+.mcard .top{display:flex;justify-content:space-between;align-items:flex-start}
+.mcard .ic{width:52px;height:52px;border-radius:16px;background:var(--y-soft);display:grid;place-items:center;color:var(--k);transition:.5s var(--ease)}
+.mcard .ic svg{width:25px;height:25px}
+.mcard:hover .ic{background:var(--y);transform:rotate(-8deg) scale(1.05)}
+.mcard .num{font-weight:800;font-size:12px;color:#bbb;letter-spacing:.1em}
+.mcard h3{font-weight:800;font-size:17.5px;line-height:1.25;margin-top:20px;letter-spacing:-.01em;flex:1}
+.mcard .bt{display:flex;justify-content:space-between;align-items:flex-end;margin-top:18px}
+.mcard .pr b{font-weight:900;font-size:26px;letter-spacing:-.03em}
+.mcard .pr small{font-size:12.5px;color:#8a8a8a;font-weight:700;margin-left:5px}
+.add{width:46px;height:46px;border-radius:50%;border:0;background:var(--k);color:#fff;display:grid;place-items:center;cursor:pointer;transition:background .45s var(--ease),color .45s,transform .45s var(--ease)}
+.add svg{width:20px;height:20px}
+.add:hover{background:var(--y);color:var(--k);transform:rotate(90deg)}
+.add.ok{background:#2fd36e;color:#fff;transform:none}
+.extras{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.extras .t{font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:8px;color:#888}
+.extras span.x{display:flex;gap:8px;align-items:center;background:#fff;border-radius:99px;padding:10px 16px 10px 12px;font-size:14px;font-weight:600;box-shadow:inset 0 0 0 1px #0000000d}
+.extras span.x svg{width:15px;height:15px;color:#999}
+.extras span.x b{font-weight:900;margin-left:4px}
+.menu .note{margin-top:30px;font-size:13px;color:#8d8d8d;display:flex;gap:8px;align-items:center}
+
+/* lemon */
+.lemon{background:var(--cream);color:var(--k);padding:0 0 140px}
+.lemon .h2{font-size:clamp(30px,3.5vw,52px)}
+.lemon .box{background:var(--k);color:#fff;border-radius:44px;padding:80px 70px 100px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:50px;align-items:center;overflow:hidden;position:relative}
+.lemon .box:before{content:"";position:absolute;width:640px;height:640px;right:-160px;top:-160px;border-radius:50%;background:radial-gradient(circle,#ffd40030,transparent 65%)}
+.lemon .box p{color:#bdbdbd;margin-top:22px;line-height:1.7;font-size:17px;max-width:460px}
+.food{display:flex;gap:10px;margin-top:32px;flex-wrap:wrap}
+.food div{display:flex;gap:10px;align-items:center;padding:12px 18px 12px 14px;border-radius:99px;background:#ffffff0d;box-shadow:inset 0 0 0 1px #ffffff14;font-weight:700;font-size:14px}
+.food div svg{color:var(--y);width:20px;height:20px}
+.glasses{display:flex;justify-content:center;align-items:flex-end;gap:26px;height:380px;position:relative}
+.glass{width:104px;height:220px;position:relative;cursor:pointer;animation:float 4.5s ease-in-out infinite}
+.glass:nth-child(2){height:260px;animation-delay:-1.5s}.glass:nth-child(3){animation-delay:-3s}
+.glass .body{position:absolute;inset:0;border-radius:12px 12px 30px 30px;background:linear-gradient(90deg,#ffffff38,#ffffff08 35%,#ffffff04 65%,#ffffff2a);box-shadow:inset 0 0 0 2px #ffffff40;overflow:hidden}
+.glass .liq{position:absolute;inset:auto 0 0;height:76%;background:var(--c);transition:height .8s var(--ease)}
+.glass .liq:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,#fff7 1.5px,transparent 2.5px) 0 0/20px 28px,radial-gradient(circle at 70% 60%,#fff6 1.5px,transparent 2.5px) 0 0/24px 32px;animation:bub 3.5s linear infinite}
+.glass .ice{position:absolute;width:32px;height:28px;border-radius:7px;background:#ffffff59;box-shadow:inset 0 0 0 1px #fff8;left:16px;top:30%;transform:rotate(18deg)}
+.glass .ice+.ice{left:52px;top:44%;transform:rotate(-14deg)}
+.glass .logo{position:absolute;width:46px;height:46px;border-radius:50%;left:50%;top:60%;transform:translate(-50%,-50%);overflow:hidden;box-shadow:0 4px 10px #0004}
+.glass .straw{position:absolute;width:9px;height:130px;left:62%;top:-66px;border-radius:5px;background:repeating-linear-gradient(45deg,var(--y) 0 8px,#111 8px 16px);transform:rotate(12deg)}
+.glass .lbl{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:13px;font-weight:700;color:#ddd}
+.glass .lbl b{display:block;color:var(--y);font-weight:900;font-size:15px;margin-top:2px}
+.glass:hover .liq{height:94%}
+@keyframes float{50%{transform:translateY(-16px) rotate(2deg)}}
+@keyframes bub{to{background-position:0 -56px,0 -64px}}
+
+.glasses{position:relative;height:460px;margin:-40px -30px -60px}
+.glasses canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.glasses .lbls{position:absolute;left:0;right:0;bottom:44px;display:grid;grid-template-columns:repeat(3,1fr);text-align:center;pointer-events:none}
+.glasses .lbls span{display:block;font-size:13px;font-weight:700;color:#ddd}
+.glasses .lbls b{display:block;color:var(--y);font-weight:900;font-size:16px;margin-top:3px}
+.glasses .hint{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;font-size:12px;font-weight:700;color:#8a8a8a;white-space:nowrap;pointer-events:none}
+.glasses .hint svg{width:14px;height:14px;color:var(--y)}
+
+/* reels */
+.reels{padding:150px 0 130px;overflow:hidden}
+.reels .ctrl{display:flex;gap:10px;align-items:center}
+.cflow{position:relative;height:620px;margin-top:60px;perspective:1600px;touch-action:pan-y;user-select:none}
+.rc{position:absolute;left:50%;top:0;width:340px;height:604px;margin-left:-170px;border-radius:30px;overflow:hidden;background:#222 center/cover;transition:transform .9s var(--ease),opacity .9s var(--ease),filter .9s;box-shadow:var(--shadow);cursor:pointer}
+.rc video{width:100%;height:100%;object-fit:cover}
+.rc:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0005,transparent 18%,transparent 55%,#000c);pointer-events:none}
+.rc .meta{position:absolute;left:20px;right:20px;bottom:20px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.rc .meta b{font-weight:800;font-size:16px;line-height:1.3}
+.rc .meta a{flex:none;width:42px;height:42px;border-radius:50%;background:#fff2;backdrop-filter:blur(8px);display:grid;place-items:center;transition:.3s}
+.rc .meta a:hover{background:var(--y);color:var(--k)}
+.rc .play{position:absolute;inset:0;display:grid;place-items:center;z-index:2;opacity:0;transition:opacity .4s;pointer-events:none}
+.rc .play i{width:76px;height:76px;border-radius:50%;background:var(--y);color:var(--k);display:grid;place-items:center;box-shadow:0 10px 30px #0006}
+.rc .play svg{width:28px;height:28px;fill:currentColor;margin-left:4px}
+.rc:not(.active) .play,.rc.paused .play{opacity:1}
+.rc .snd{position:absolute;top:14px;right:14px;z-index:3;width:42px;height:42px;border-radius:50%;border:0;background:#0008;color:#fff;backdrop-filter:blur(8px);display:none;place-items:center;cursor:pointer;transition:.3s}
+.rc .snd:hover{background:var(--y);color:var(--k)}
+.rc.active .snd{display:grid}
+.rc .snd svg{width:19px;height:19px}
+.rc .ig{position:absolute;top:14px;left:14px;z-index:3;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;background:#0008;backdrop-filter:blur(8px);padding:6px 12px 6px 6px;border-radius:99px}
+.rc .ig img{width:28px;height:28px;border-radius:50%}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:34px}
+.dots button{width:8px;height:8px;border-radius:99px;border:0;background:#ffffff33;cursor:pointer;transition:.5s var(--ease);padding:0}
+.dots button.on{width:34px;background:var(--y)}
+
+/* places */
+.places{background:var(--y);color:var(--k);padding:140px 0;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.places .grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;margin-top:56px;align-items:stretch}
+.plist{display:flex;flex-direction:column;gap:10px}
+.place{display:flex;gap:16px;align-items:center;padding:18px 18px 18px 18px;border-radius:24px;background:#ffffff6b;cursor:pointer;transition:background .5s var(--ease),color .5s}
+.place:hover{background:#ffffffb3}
+.place .pin{width:50px;height:50px;border-radius:16px;background:var(--k);color:var(--y);display:grid;place-items:center;flex:none;transition:.5s var(--ease)}
+.place .pin svg{width:22px;height:22px}
+.place h3{font-weight:800;font-size:16.5px}
+.place p{font-size:13.5px;color:#4b4b4b;margin-top:3px;font-weight:600}
+.place .go{margin-left:auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px #0000002e;transition:.4s var(--ease);flex:none}
+.place .go svg{width:18px;height:18px}
+.place .go:hover{background:var(--k);color:var(--y);box-shadow:none;transform:rotate(45deg)}
+.place.on{background:var(--k);color:#fff}
+.place.on p{color:#aaa}
+.place.on .pin{background:var(--y);color:var(--k)}
+.place.on .go{box-shadow:inset 0 0 0 1.5px #ffffff3d}
+.place.on .go:hover{background:var(--y);color:var(--k)}
+.mapbox{border-radius:30px;overflow:hidden;min-height:440px;background:#e9e3d0;box-shadow:0 30px 70px -30px #0006;position:relative}
+.mapbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.info .c{background:var(--k);color:#fff;border-radius:24px;padding:22px;display:flex;align-items:center;gap:16px;transition:translate .5s var(--ease),box-shadow .5s}
+.info a.c:hover{translate:0 -4px;box-shadow:0 20px 40px -20px #000a}
+.info .c .ic{width:48px;height:48px;border-radius:15px;background:#ffd4001f;color:var(--y);display:grid;place-items:center;flex:none}
+.info .c .ic svg{width:22px;height:22px}
+.info .c small{font-size:11px;color:#999;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.info .c b{font-weight:900;font-size:19px;letter-spacing:-.01em;display:block;margin-top:4px;white-space:nowrap}
+
+/* final */
+.final{padding:160px 0 120px;text-align:center;overflow:hidden}
+.final .h1{font-size:clamp(46px,8.6vw,140px)}
+.final p{color:#aaa;margin:26px auto 0;max-width:520px;line-height:1.7}
+.final .cta{display:flex;gap:12px;justify-content:center;margin-top:44px;flex-wrap:wrap}
+.socials{display:flex;gap:10px;justify-content:center;margin-top:30px}
+footer{border-top:1px solid var(--line);padding:56px 0 40px;color:#888;font-size:14px}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
+footer h4{color:#fff;font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px}
+footer a:not(.brand){display:block;padding:5px 0;transition:.3s}
+footer a:not(.brand):hover{color:var(--y);translate:4px 0}
+footer .bottom{grid-column:1/-1;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:28px;margin-top:10px;border-top:1px solid var(--line);font-size:13px}
+
+/* cart */
+#cart{position:fixed;left:50%;bottom:22px;z-index:60;translate:-50% 180%;transition:translate .7s var(--ease);display:flex;align-items:center;gap:14px;padding:10px 10px 10px 10px;border-radius:99px;background:#121212f0;backdrop-filter:blur(16px);box-shadow:0 30px 60px -10px #000c,inset 0 0 0 1px #ffffff1a;max-width:calc(100% - 24px)}
+#cart.show{translate:-50% 0}
+#cart .cnt{width:46px;height:46px;border-radius:50%;background:var(--y);color:var(--k);display:grid;place-items:center;font-weight:900;font-size:16px;flex:none}
+#cart .cnt.bump{animation:bump .5s var(--ease)}
+@keyframes bump{40%{transform:scale(1.25)}}
+#cart .txt{min-width:0}
+#cart .txt small{display:block;font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+#cart .txt b{font-weight:900;font-size:18px;white-space:nowrap}
+#cart .x{width:42px;height:42px;border-radius:50%;border:0;background:#ffffff12;color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;transition:.3s}
+#cart .x:hover{background:#ff5d5d}
+#cart .x svg{width:16px;height:16px}
+.toast{position:fixed;left:50%;bottom:100px;z-index:61;translate:-50% 16px;opacity:0;transition:.45s var(--ease);background:#fff;color:var(--k);padding:12px 18px;border-radius:16px;font-weight:700;font-size:14px;display:flex;gap:10px;align-items:center;pointer-events:none;box-shadow:var(--shadow)}
+.toast svg{color:#2fd36e;width:20px;height:20px}
+.toast.show{opacity:1;translate:-50% 0}
+
+/* responsive */
+@media(max-width:1100px){.mgrid{grid-template-columns:repeat(3,1fr)}.info{grid-template-columns:1fr}}
+@media(max-width:900px){
+ .wrap{padding:0 20px}
+ .links,.nav-r>.btn{display:none}
+ .burger{display:block}
+ nav .bar{padding:0 10px;margin-top:10px}
+ .brand img{width:44px;height:44px}
+ .hero{padding:100px 0 50px}
+ .hero .wrap{grid-template-columns:1fr;gap:30px}
+ .stage{order:-1;height:58vh}
+ .badge-rot{width:108px;height:108px;right:2%;top:0}.badge-rot .core{inset:22px}
+ .price-tag{right:2%;bottom:6%;padding:10px 14px 10px 10px}.price-tag .ic{width:38px;height:38px}
+ #cup3d{left:-55%;width:150%}
+ .hero .h1{font-size:clamp(42px,12vw,76px);margin:20px 0 22px}
+ .scroll-cue{display:none}
+ .phone .tag>span:last-child{display:none}
+ .phone{border-radius:30px}
+ .trust{gap:18px}
+ .about{padding:90px 0}
+ .about .wrap{grid-template-columns:1fr;gap:60px}
+ .collage{height:520px}
+ .steps{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:40px -20px 0;padding:0 20px 10px;scrollbar-width:none}
+ .steps::-webkit-scrollbar{display:none}
+ .step{flex:0 0 78%;scroll-snap-align:center}
+ .step p{max-height:120px;opacity:1}
+ .mgrid{grid-template-columns:1fr 1fr;gap:10px}
+ .mcard{min-height:196px;padding:18px;border-radius:22px}
+ .mcard .pr b{font-size:21px}
+ .tabs{width:100%;overflow-x:auto;scrollbar-width:none}
+ .tabs::-webkit-scrollbar{display:none}
+ .tabs button{flex:none;padding:0 16px}
+ .lemon .box{grid-template-columns:1fr;padding:50px 24px 100px;border-radius:32px}
+ .glasses{height:330px;margin:-30px -16px -50px}
+ .cflow{height:540px}.rc{width:290px;height:516px;margin-left:-145px}
+ .places .grid{grid-template-columns:1fr}
+ .mapbox{min-height:340px}
+ footer .wrap{grid-template-columns:1fr 1fr}
+ footer .wrap>div:first-child{grid-column:1/-1}
+ .menu,.places{padding:100px 0}
+ .final{padding:110px 0 90px}
+}
+@media(max-width:520px){.mgrid{grid-template-columns:1fr}.mcard{min-height:auto}.mcard h3{margin:14px 0 4px}#cart .txt small{max-width:120px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+ <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+ <symbol id="i-phone" viewBox="0 0 24 24"><path d="M21.5 16.6v2.9a2 2 0 0 1-2.2 2A19.6 19.6 0 0 1 2.5 4.7 2 2 0 0 1 4.5 2.5h2.9a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.4 10.3a16 16 0 0 0 5.3 5.3l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+ <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6 7-11.5a7 7 0 1 0-14 0c0 5.5 7 11.5 7 11.5z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"/></symbol>
+ <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".6" fill="currentColor"/></symbol>
+ <symbol id="i-tg" viewBox="0 0 24 24"><path d="M21.2 4.2 2.9 11.3c-.8.3-.8 1.4 0 1.6l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.4 4.6 3.4c.6.4 1.4.1 1.6-.6l3-14.9c.2-.9-.6-1.6-1.3-1.5z"/><path d="m7.5 14.3 10-7.2-7.7 8.6"/></symbol>
+ <symbol id="i-cup" viewBox="0 0 24 24"><path d="M5.5 8.5h13l-1.4 11.8a2 2 0 0 1-2 1.7H8.9a2 2 0 0 1-2-1.7z"/><path d="M4.5 5.5h15v3h-15zM8 5.5l1-2.5h6l1 2.5M8.5 13.5h7"/></symbol>
+ <symbol id="i-ice" viewBox="0 0 24 24"><path d="M5.5 7.5h13L17 21.2a1 1 0 0 1-1 .8H8a1 1 0 0 1-1-.8z"/><path d="m12 7.5 3.5-5.5 2 .8"/><rect x="8.3" y="11" width="3.4" height="3.4" rx=".8" transform="rotate(-12 10 12.7)"/><rect x="12.4" y="13.6" width="3.2" height="3.2" rx=".8" transform="rotate(14 14 15.2)"/></symbol>
+ <symbol id="i-lemon" viewBox="0 0 24 24"><path d="M6 3.5h12L16.3 21a1 1 0 0 1-1 .9H8.7a1 1 0 0 1-1-.9z"/><path d="M6.5 8.5h11"/><circle cx="17.5" cy="5" r="3.2"/><path d="M17.5 1.8v6.4M14.3 5h6.4"/></symbol>
+ <symbol id="i-tea" viewBox="0 0 24 24"><path d="M3.5 9h13v4.5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M16.5 10.5h1.8a2.6 2.6 0 0 1 0 5.2h-2.1M7.5 2.5c-.8 1.3.8 2.2 0 3.5M11.5 2.5c-.8 1.3.8 2.2 0 3.5M2.5 21.5h15"/></symbol>
+ <symbol id="i-waffle" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M3.5 9.2h17M3.5 14.8h17M9.2 3.5v17M14.8 3.5v17"/></symbol>
+ <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M2.5 11h19a9.5 9.5 0 0 1-19 0z"/><path d="M8 7.5c0-1.8 1.8-1.8 1.8-3.6M13 7.5c0-1.8 1.8-1.8 1.8-3.6M7 21h10"/></symbol>
+ <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19.5C5 10 11 4.5 20 4.5c0 9-5.5 15-15 15z"/><path d="M5 19.5 13.5 11"/></symbol>
+ <symbol id="i-moto" viewBox="0 0 24 24"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h6.5l-2.5-7H9.5M12.5 10h4l2 7M16 6.5h2.5"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+ <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+ <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+ <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></symbol>
+ <symbol id="i-vol" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.3a8 8 0 0 1 0 11.4"/></symbol>
+ <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></symbol>
+ <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14a6.5 6.5 0 0 1 3.5 6"/></symbol>
+ <symbol id="i-store" viewBox="0 0 24 24"><path d="M3.5 9.5 5 4h14l1.5 5.5a2.8 2.8 0 0 1-5.6 0 2.8 2.8 0 0 1-5.6 0 2.8 2.8 0 0 1-5.8 0zM5 12v8.5h14V12M10 20.5V15h4v5.5"/></symbol>
+ <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.2"/></symbol>
+</svg>
+
+<div class="grain"></div>
+<div id="progress"></div>
+<div class="cursor" id="cur"><span id="curl"></span></div><div class="cursor-dot" id="curd"></div>
+
+<div id="loader"><img src="assets/logo.jpg" alt="Варим кофе"><div class="num" id="lnum">0%</div><div class="cap" data-i="loading">Варим для тебя</div></div>
+
+<nav id="nav"><div class="bar"><div class="in">
+ <a class="brand" href="#top" aria-label="Варим кофе"><img src="assets/logo.jpg" alt=""><span>ВАРИМ<br>КОФЕ</span></a>
+ <div class="links">
+  <a href="#about" data-i="nav_about">О нас</a><a href="#menu" data-i="nav_menu">Меню</a><a href="#reels" data-i="nav_reels">Reels</a><a href="#places" data-i="nav_places">Адреса</a>
+ </div>
+ <div class="nav-r">
+  <div class="lang" id="lang"><i></i><button data-l="ru" class="on">RU</button><button data-l="uz">UZ</button></div>
+  <a class="btn sm mag" href="tel:+998933866712"><svg class="i"><use href="#i-phone"/></svg><span data-i="nav_order">Заказать</span></a>
+  <button class="burger" id="burger" aria-label="menu"><i></i><i></i></button>
+ </div>
+</div></div></nav>
+
+<div class="mmenu" id="mmenu">
+ <a class="big" href="#about" data-i="nav_about">О нас</a><a class="big" href="#menu" data-i="nav_menu">Меню</a><a class="big" href="#reels" data-i="nav_reels">Reels</a><a class="big" href="#places" data-i="nav_places">Адреса</a>
+ <div class="row"><a class="btn dark" href="tel:+998933866712"><svg class="i"><use href="#i-phone"/></svg><span data-i="nav_order">Заказать</span></a>
+ <a class="ibtn" href="https://instagram.com/warumkaffee" target="_blank" rel="noopener" aria-label="Instagram"><svg class="i"><use href="#i-ig"/></svg></a>
+ <a class="ibtn" href="https://t.me/warumkaffee" target="_blank" rel="noopener" aria-label="Telegram"><svg class="i"><use href="#i-tg"/></svg></a></div>
+</div>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+ <div class="copy">
+  <div class="live"><span class="pulse" id="pulse"></span><span id="openTxt">Сейчас открыто</span></div>
+  <h1 class="h1" data-split data-ih="h1">Варим кофе.<br><em>А чё не варить-то?</em></h1>
+  <p class="lead hero-fade" data-i="lead">Четыре точки 2GO в Ташкенте. Варим для тебя с 8 утра: пришёл, взял с собой — и отправился покорять мир.</p>
+  <div class="cta hero-fade">
+   <a class="btn mag" href="#menu"><span data-i="cta_menu">Смотреть меню</span><span class="arr"><svg class="i"><use href="#i-arrow"/></svg><svg class="i"><use href="#i-arrow"/></svg></span></a>
+   <a class="btn ghost mag" href="#places"><svg class="i"><use href="#i-pin"/></svg><span data-i="cta_places">Найти точку</span></a>
+  </div>
+  <div class="trust hero-fade">
+   <div class="t"><div class="ic"><svg class="i"><use href="#i-star"/></svg></div><div><b>4,9 <span class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span></b><small data-i="tr_g">рейтинг Google</small></div></div>
+   <div class="t"><div class="ic"><svg class="i"><use href="#i-ig"/></svg></div><div><b>5 200+</b><small data-i="tr_ig">в Instagram</small></div></div>
+   <div class="t"><div class="ic"><svg class="i"><use href="#i-store"/></svg></div><div><b data-i="tr_p_b">4 точки</b><small data-i="tr_p">по городу</small></div></div>
+  </div>
+ </div>
+ <div class="stage" id="stage">
+  <div class="phone" id="phone" style="background-image:url(assets/p/hero.jpg)" data-cursor="LIVE">
+   <video src="assets/v/hero.mp4" poster="assets/p/hero.jpg" autoplay muted loop playsinline preload="auto"></video>
+   <div class="tag"><span><i class="rec"></i><span data-i="live_bar">Сейчас на баре</span></span><span>@warumkaffee</span></div>
+   <div class="cap"><b data-i="hero_cap">Айс-латте · 45k</b><small data-i="hero_cap2">Бобура, 73Б · с 08:00</small></div>
+  </div>
+  <div class="badge-rot"><svg class="ring" viewBox="0 0 150 150"><circle class="bg" cx="75" cy="75" r="75"/><defs><path id="circ" d="M75,75 m-59,0 a59,59 0 1,1 118,0 a59,59 0 1,1 -118,0"/></defs><text><textPath href="#circ" id="ringTxt">ВАРИМ С 08:00 • А ЧЁ НЕ ВАРИТЬ-ТО? • </textPath></text></svg><div class="core"><img src="assets/logo.jpg" alt=""></div></div>
+  <div class="price-tag"><div class="ic"><svg class="i"><use href="#i-cup"/></svg></div><div><small data-i="pt_s">Хит меню</small><b data-i="pt_b">Раф · 50k</b></div></div>
+  <canvas id="cup3d"></canvas>
+ </div>
+</div>
+<div class="scroll-cue"><span class="m"></span><span data-i="scroll">Листай</span></div>
+</section>
+
+<div class="mq" id="mq"><div class="row a" id="mqa"></div><div class="row b" id="mqb"></div></div>
+
+<section class="about" id="about"><div class="wrap">
+ <div class="collage">
+  <div class="v v1" style="background-image:url(assets/p/store.jpg)" data-cursor="2GO"><video data-src="assets/v/store.mp4" poster="assets/p/store.jpg" muted loop playsinline preload="none"></video></div>
+  <div class="v v2" style="background-image:url(assets/p/night.jpg)"><video data-src="assets/v/night.mp4" poster="assets/p/night.jpg" muted loop playsinline preload="none"></video></div>
+  <div class="stamp"><svg class="i"><use href="#i-clock"/></svg><div><small data-i="stamp_s">08:00 — 23:00</small><span data-i="stamp_b">Каждый день</span></div></div>
+ </div>
+ <div>
+  <div class="kicker" data-i="about_k">О нас</div>
+  <h2 class="h2" style="margin-top:22px" data-split data-ih="about_h">Пара столиков.<br><em>Огромное</em> комьюнити</h2>
+  <p class="body reveal" data-i="about_p"></p>
+  <div class="stats">
+   <div class="stat reveal"><div class="ic"><svg class="i"><use href="#i-store"/></svg></div><div><b data-count="4">0</b><span data-i="st1">точки в Ташкенте</span></div></div>
+   <div class="stat reveal"><div class="ic"><svg class="i"><use href="#i-clock"/></svg></div><div><b data-count="15">0</b><span data-i="st2">часов в день варим</span></div></div>
+   <div class="stat reveal"><div class="ic"><svg class="i"><use href="#i-cup"/></svg></div><div><b data-count="26" data-suf="+">0</b><span data-i="st3">напитков в меню</span></div></div>
+   <div class="stat reveal"><div class="ic"><svg class="i"><use href="#i-users"/></svg></div><div><b data-count="5200" data-suf="+">0</b><span data-i="st4">подписчиков</span></div></div>
+  </div>
+ </div>
+</div></section>
+
+<section class="process"><div class="wrap">
+ <div class="head">
+  <div><div class="kicker" data-i="pr_k">Как мы варим</div><h2 class="h2" style="margin-top:22px" data-split data-ih="pr_h">Три шага<br>до <em>идеальной</em> чашки</h2></div>
+  <p class="reveal" data-i="pr_p"></p>
+ </div>
+ <div class="steps">
+  <div class="step reveal" style="background-image:url(assets/p/step1.jpg)"><video data-src="assets/v/step1.mp4" poster="assets/p/step1.jpg" muted loop playsinline preload="none"></video><div class="n">01</div><div class="tx"><h3><span data-i="s1h">Эспрессо</span><svg class="i"><use href="#i-arrow"/></svg></h3><p data-i="s1p"></p></div></div>
+  <div class="step reveal" style="background-image:url(assets/p/step2.jpg)"><video data-src="assets/v/step2.mp4" poster="assets/p/step2.jpg" muted loop playsinline preload="none"></video><div class="n">02</div><div class="tx"><h3><span data-i="s2h">Подача</span><svg class="i"><use href="#i-arrow"/></svg></h3><p data-i="s2p"></p></div></div>
+  <div class="step reveal" style="background-image:url(assets/p/step3.jpg)"><video data-src="assets/v/step3.mp4" poster="assets/p/step3.jpg" muted loop playsinline preload="none"></video><div class="n">03</div><div class="tx"><h3><span data-i="s3h">Айс и лимонады</span><svg class="i"><use href="#i-arrow"/></svg></h3><p data-i="s3p"></p></div></div>
+ </div>
+</div></section>
+
+<section class="menu" id="menu"><div class="wrap">
+ <div class="head">
+  <div><div class="kicker dark-k" data-i="menu_k">Меню</div><h2 class="h2" style="margin-top:22px" data-split data-ih="menu_h">Что <em>варим</em> сегодня</h2></div>
+  <div class="tabs" id="tabs"><span class="pill" id="tpill"></span></div>
+ </div>
+ <div class="mgrid" id="mgrid"></div>
+ <div class="extras" id="extras"></div>
+ <div class="note"><svg class="i"><use href="#i-info"/></svg><span data-i="menu_note"></span></div>
+</div></section>
+
+<section class="lemon" id="lemon"><div class="wrap"><div class="box">
+ <div style="position:relative">
+  <div class="kicker" data-i="lem_k">Авторские лимонады</div>
+  <h2 class="h2" style="margin-top:22px" data-split data-ih="lem_h">Хочется чего-то<br><em>холодненького?</em></h2>
+  <p class="reveal" data-i="lem_p"></p>
+  <div class="food reveal"><div><svg class="i"><use href="#i-waffle"/></svg><span data-i="f1"></span></div><div><svg class="i"><use href="#i-bowl"/></svg><span data-i="f2"></span></div><div><svg class="i"><use href="#i-leaf"/></svg><span data-i="f3"></span></div></div>
+ </div>
+ <div class="glasses" id="lemon3d">
+  <canvas id="lemonCanvas"></canvas>
+  <div class="lbls">
+   <div><span data-i="g1"></span><b>60k</b></div>
+   <div><span data-i="g2"></span><b>50k</b></div>
+   <div><span data-i="g3"></span><b>40k</b></div>
+  </div>
+  <div class="hint"><svg class="i"><use href="#i-plus"/></svg><span data-i="g_hint"></span></div>
+ </div>
+</div></div></section>
+
+<section class="reels" id="reels"><div class="wrap">
+ <div class="head">
+  <div><div class="kicker" data-i="rl_k">Reels</div><h2 class="h2" style="margin-top:22px" data-split data-ih="rl_h">Снимаем кино<br>про <em>кофе</em></h2></div>
+  <div class="ctrl"><button class="ibtn" id="prev" aria-label="prev"><svg class="i"><use href="#i-left"/></svg></button><button class="ibtn" id="next" aria-label="next"><svg class="i"><use href="#i-right"/></svg></button>
+  <a class="btn ghost sm mag" href="https://instagram.com/warumkaffee/reels/" target="_blank" rel="noopener"><svg class="i"><use href="#i-ig"/></svg><span data-i="rl_all">Все Reels</span></a></div>
+ </div>
+</div>
+ <div class="cflow" id="cflow"></div>
+ <div class="dots" id="dots"></div>
+</section>
+
+<section class="places" id="places"><div class="wrap">
+ <div class="kicker dark-k" data-i="pl_k">Адреса</div>
+ <h2 class="h2" style="margin-top:22px" data-split data-ih="pl_h"></h2>
+ <div class="grid">
+  <div class="plist" id="plist"></div>
+  <div class="mapbox"><iframe id="map" title="map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+ </div>
+ <div class="info">
+  <div class="c"><div class="ic"><svg class="i"><use href="#i-clock"/></svg></div><div><small data-i="h_d">Каждый день</small><b>08:00 — 23:00</b></div></div>
+  <a class="c" href="tel:+998933866712"><div class="ic"><svg class="i"><use href="#i-moto"/></svg></div><div><small data-i="h_del">Доставка</small><b>+998 93 386 67 12</b></div></a>
+  <a class="c" href="tel:+998777019711"><div class="ic"><svg class="i"><use href="#i-phone"/></svg></div><div><small data-i="h_ph">Телефон</small><b>+998 77 701 97 11</b></div></a>
+ </div>
+</div></section>
+
+<section class="final"><div class="wrap">
+ <div class="kicker" data-i="ct_k">Ждём в гости</div>
+ <h2 class="h1" style="margin-top:26px" data-split data-ih="ct_h"></h2>
+ <p class="reveal" data-i="ct_p"></p>
+ <div class="cta reveal">
+  <a class="btn mag" href="tel:+998933866712"><svg class="i"><use href="#i-moto"/></svg><span data-i="ct_b1">Заказать доставку</span><span class="arr"><svg class="i"><use href="#i-arrow"/></svg><svg class="i"><use href="#i-arrow"/></svg></span></a>
+  <a class="btn ghost mag" href="#places"><svg class="i"><use href="#i-pin"/></svg><span data-i="cta_places">Найти точку</span></a>
+ </div>
+ <div class="socials reveal">
+  <a class="ibtn mag" href="https://instagram.com/warumkaffee" target="_blank" rel="noopener" aria-label="Instagram"><svg class="i"><use href="#i-ig"/></svg></a>
+  <a class="ibtn mag" href="https://t.me/warumkaffee" target="_blank" rel="noopener" aria-label="Telegram"><svg class="i"><use href="#i-tg"/></svg></a>
+  <a class="ibtn mag" href="tel:+998777019711" aria-label="Phone"><svg class="i"><use href="#i-phone"/></svg></a>
+ </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+ <div><a class="brand" href="#top" style="color:#fff"><img src="assets/logo.jpg" alt=""><span>ВАРИМ<br>КОФЕ</span></a><p style="margin-top:18px;line-height:1.7;max-width:300px" data-i="ft_about"></p></div>
+ <div><h4 data-i="ft_nav">Навигация</h4><a href="#about" data-i="nav_about">О нас</a><a href="#menu" data-i="nav_menu">Меню</a><a href="#reels" data-i="nav_reels">Reels</a><a href="#places" data-i="nav_places">Адреса</a></div>
+ <div><h4 data-i="ft_contact">Контакты</h4><a href="tel:+998777019711">+998 77 701 97 11</a><a href="tel:+998933866712"><span data-i="h_del">Доставка</span>: 93 386 67 12</a><a href="#places" data-i="ft_hours"></a></div>
+ <div><h4 data-i="ft_soc">Соцсети</h4><a href="https://instagram.com/warumkaffee" target="_blank" rel="noopener">Instagram</a><a href="https://t.me/warumkaffee" target="_blank" rel="noopener">Telegram</a></div>
+ <div class="bottom"><span>© 2026 Варим кофе, Ташкент</span><span data-i="foot"></span></div>
+</div></footer>
+
+<div id="cart"><div class="cnt" id="ccnt">0</div><div class="txt"><small id="clist"></small><b id="ctot"></b></div>
+ <a class="btn sm" id="cgo" href="tel:+998933866712"><svg class="i"><use href="#i-phone"/></svg><span data-i="c_go">Заказать</span></a>
+ <button class="x" id="cx" aria-label="clear"><svg class="i"><use href="#i-x"/></svg></button></div>
+<div class="toast" id="toast"><svg class="i"><use href="#i-check"/></svg><span></span></div>
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+const MENU={
+ coffee:{ru:"Кофе",uz:"Qahva",ic:"cup",items:[["Эспрессо / Американо","Espresso / Amerikano",20],["Капучино / Латте","Kapuchino / Latte",30],["Флэт уайт","Flat white",35],["Раф","Raf",50],["Кофейный сидр","Qahvali sidr",35]],
+  extras:[["Альтернативное молоко","O'simlik suti",15],["Сироп","Sirop",10],["Шот эспрессо","Espresso shot",10]]},
+ ice:{ru:"Айс-кофе",uz:"Muzli qahva",ic:"ice",items:[["Айс-американо","Ice-Amerikano",35],["Айс-капучино / латте","Ice-kapuchino / latte",45],["Эспрессо-тоник","Espresso-tonik",50],["Шмель","Shmel",50],["Кофе по-хорезмски","Xorazmcha qahva",100],["Калифорнийский SWIFT","Kaliforniya SWIFT",50]],
+  extras:[["Шмель: апельсин, вишня или яблоко","Shmel: apelsin, gilos yoki olma",0]]},
+ cold:{ru:"Лимонады",uz:"Limonadlar",ic:"lemon",items:[["Айс-ти","Ice-tea",45],["Сен-Тропе","Sen-Trope",50],["Лимон-базилик","Limon-rayhon",40],["Грушевый","Nokli",60],["Персиковый","Shaftoli",50],["Клубника-личи","Qulupnay-lichi",50],["Манго-маракуйя","Mango-marakuya",50],["Тархун","Tarxun",40]]},
+ hot:{ru:"Не кофе",uz:"Issiq ichimliklar",ic:"tea",items:[["Чёрный / зелёный чай","Qora / ko'k choy",15],["Горный чай","Tog' choyi",15],["Ягодный чай","Mevali choy",35],["Жасмин-алоэ","Jasmin-aloe",35],["Шиповник-земляника","Na'matak-qulupnay",35],["Какао","Kakao",40],["Кофейный глинтвейн","Qahvali glintveyn",40]],
+  extras:[["Мёд","Asal",10],["Лимон фреш","Limon fresh",10]]}
+};
+const PLACES=[
+ {ru:["ул. Бобура, 73Б","Флагман · пара столиков"],uz:["Bobur ko'chasi, 73B","Asosiy nuqta · bir nechta stol"],q:"41.2784499,69.2585797"},
+ {ru:["Парк «Голубые купола»","м. Космонавтов"],uz:["«Moviy gumbazlar» bog'i","Kosmonavtlar metrosi"],q:"Голубые купола парк Ташкент"},
+ {ru:["ул. Нукус, 31/2","Внутри Teplo Store"],uz:["Nukus ko'chasi, 31/2","Teplo Store ichida"],q:"Teplo Store Нукус 31/2 Ташкент"},
+ {ru:["Центральный парк им. М. Улугбека","Кофе на прогулке"],uz:["Mirzo Ulug'bek markaziy bog'i","Sayr paytida qahva"],q:"Центральный парк Мирзо Улугбека Ташкент"}
+];
+const REELS=[
+ {id:"DcYO8oDACbk",ru:"Шок-сервис: доставка кофе",uz:"Shok-servis: qahva yetkazish"},
+ {id:"Dbco4eztaUM",ru:"Чем удивить владыку?",uz:"Hukmdorni nima bilan hayratlantirish mumkin?"},
+ {id:"DbJM5NjtPW9",ru:"Метро Ташкента — подземные дворцы",uz:"Toshkent metrosi — yer osti saroylari"},
+ {id:"DcfYK4_AA5K",ru:"Жаль, что лето кончается…",uz:"Afsus, yoz tugayapti…"},
+ {id:"DfKrcCCNcDf",ru:"Halloween в Варим кофе",uz:"Varim kofe'da Halloween"},
+ {id:"Da7oiJgtwN9",ru:"Что там шевелится?!",uz:"U yerda nima qimirlayapti?!"},
+ {id:"DcH7N6QgGhs",ru:"Good morning с Варим кофе",uz:"Varim kofe bilan xayrli tong"}
+];
+const T={
+ ru:{loading:"Варим для тебя",nav_about:"О нас",nav_menu:"Меню",nav_reels:"Reels",nav_places:"Адреса",nav_order:"Заказать",
+  h1:"Варим кофе.<br><em>А чё не варить-то?</em>",lead:"Четыре точки 2GO в Ташкенте. Варим для тебя с 8 утра: пришёл, взял с собой — и отправился покорять мир.",
+  cta_menu:"Смотреть меню",cta_places:"Найти точку",tr_g:"рейтинг Google",tr_ig:"в Instagram",tr_p_b:"4 точки",tr_p:"по городу",live_bar:"Сейчас на баре",hero_cap:"Айс-латте · 45k",hero_cap2:"Бобура, 73Б · с 08:00",
+  ring:"ВАРИМ С 08:00 • А ЧЁ НЕ ВАРИТЬ-ТО? • ",pt_s:"Хит меню",pt_b:"Раф · 50k",scroll:"Листай",
+  mq1:["Кофе 2GO","Авторские лимонады","Хрустящие вафли","ПП гранола"],mq2:["Айс-латте","Раф","Эспрессо-тоник","Матча","Шмель"],
+  stamp_s:"08:00 — 23:00",stamp_b:"Каждый день",about_k:"О нас",about_h:"Пара столиков.<br><em>Огромное</em> комьюнити",
+  about_p:"«Варим кофе» — это четыре точки формата 2GO. Пришёл, взял с собой и отправился покорять мир. У нас всего пара столиков, но это не помешало собрать крутое комьюнити, которое возвращается каждый день — за рафом, айс-латте и авторскими лимонадами.",
+  st1:"точки в Ташкенте",st2:"часов в день варим",st3:"напитков в меню",st4:"подписчиков",
+  pr_k:"Как мы варим",pr_h:"Три шага<br>до <em>идеальной</em> чашки",pr_p:"Никаких полуфабрикатов: каждый напиток собирается при тебе, прямо на баре.",
+  s1h:"Эспрессо",s1p:"Свежий помол, ровный темпинг и правильная экстракция. Каждый шот — как первый.",s2h:"Подача",s2p:"Молоко, сиропы, альтернативное молоко — собираем напиток под тебя прямо на глазах.",s3h:"Айс и лимонады",s3p:"Много льда, свои рецепты и яркий вкус — холодное меню круглый год.",
+  menu_k:"Меню",menu_h:"Что <em>варим</em> сегодня",add_t:"Добавки",menu_note:"Цены по меню @warumkaffee. Наличие уточняйте на точке.",
+  lem_k:"Авторские лимонады",lem_h:"Хочется чего-то<br><em>холодненького?</em>",lem_p:"Груша, клубника-личи, манго-маракуйя, лимон-базилик — свои рецепты, много льда и ни капли скуки. А к ним — хрустящие вафли и ПП гранола.",
+  f1:"Хрустящие вафли",f2:"ПП гранола",f3:"Матча",g1:"Грушевый",g2:"Клубника-личи",g3:"Тархун",g_hint:"Нажми на стакан — добавим в заказ",
+  rl_k:"Reels",rl_h:"Снимаем кино<br>про <em>кофе</em>",rl_all:"Все Reels",
+  pl_k:"Адреса",pl_h:"4 точки<br>в <em>городе</em>",h_d:"Каждый день",h_del:"Доставка",h_ph:"Телефон",route:"Маршрут",
+  ct_k:"Ждём в гости",ct_h:"Топовый кофе<br><em>в твоём городе</em>",ct_p:"Заходи на любую из четырёх точек или закажи доставку — сварим за пару минут.",ct_b1:"Заказать доставку",
+  ft_about:"Кофе 2GO, авторские лимонады и хрустящие вафли. Четыре точки в Ташкенте.",ft_nav:"Навигация",ft_contact:"Контакты",ft_hours:"Ежедневно 08:00–23:00",ft_soc:"Соцсети",foot:"Сайт-концепт · фото и видео — @warumkaffee",
+  c_go:"Заказать",open:"Сейчас открыто · до 23:00",closed:"Сейчас закрыто · откроемся в 08:00",sum:"сум",added:"В заказе: ",copied:"Заказ скопирован — звоним!"},
+ uz:{loading:"Siz uchun damlaymiz",nav_about:"Biz haqimizda",nav_menu:"Menyu",nav_reels:"Reels",nav_places:"Manzillar",nav_order:"Buyurtma",
+  h1:"Qahva damlaymiz.<br><em>Nega damlamaslik kerak?</em>",lead:"Toshkentda 2GO formatidagi to'rtta nuqta. Ertalab soat 8 dan siz uchun damlaymiz: keldingiz, oldingiz — va dunyoni zabt etishga yo'l oldingiz.",
+  cta_menu:"Menyuni ko'rish",cta_places:"Nuqtani topish",tr_g:"Google reytingi",tr_ig:"Instagram'da",tr_p_b:"4 nuqta",tr_p:"shahar bo'ylab",live_bar:"Hozir barda",hero_cap:"Ays-latte · 45k",hero_cap2:"Bobur, 73B · 08:00 dan",
+  ring:"08:00 DAN DAMLAYMIZ • NEGA DAMLAMASLIK KERAK? • ",pt_s:"Menyu xiti",pt_b:"Raf · 50k",scroll:"Pastga",
+  mq1:["Qahva 2GO","Mualliflik limonadlari","Qarsildoq vafli","PP granola"],mq2:["Ays-latte","Raf","Espresso-tonik","Matcha","Shmel"],
+  stamp_s:"08:00 — 23:00",stamp_b:"Har kuni",about_k:"Biz haqimizda",about_h:"Bir nechta stol.<br><em>Katta</em> jamoa",
+  about_p:"«Varim kofe» — 2GO formatidagi to'rtta nuqta. Keldingiz, oldingiz va dunyoni zabt etishga yo'l oldingiz. Stollarimiz oz, lekin bu har kuni raf, ays-latte va mualliflik limonadlari uchun qaytib keladigan zo'r jamoa yig'ishimizga xalaqit bermadi.",
+  st1:"nuqta Toshkentda",st2:"soat har kuni",st3:"ichimlik menyuda",st4:"obunachi",
+  pr_k:"Qanday damlaymiz",pr_h:"Mukammal qahvagacha<br><em>uch</em> qadam",pr_p:"Hech qanday yarim tayyor mahsulot yo'q: har bir ichimlik ko'z oldingizda, barda tayyorlanadi.",
+  s1h:"Espresso",s1p:"Yangi tuyilgan don, tekis presslash va to'g'ri ekstraksiya. Har bir shot — birinchisidek.",s2h:"Taqdim",s2p:"Sut, siroplar, o'simlik suti — ichimlikni ko'z oldingizda siz uchun yig'amiz.",s3h:"Ays va limonadlar",s3p:"Ko'p muz, o'z retseptlarimiz va yorqin ta'm — salqin menyu yil bo'yi.",
+  menu_k:"Menyu",menu_h:"Bugun nima <em>damlaymiz</em>",add_t:"Qo'shimchalar",menu_note:"Narxlar @warumkaffee menyusi bo'yicha. Mavjudligini nuqtada aniqlang.",
+  lem_k:"Mualliflik limonadlari",lem_h:"Biror <em>salqin</em><br>narsa xohlaysizmi?",lem_p:"Nok, qulupnay-lichi, mango-marakuya, limon-rayhon — o'z retseptlarimiz, ko'p muz va zerikishga joy yo'q. Ularga qo'shib — qarsildoq vafli va PP granola.",
+  f1:"Qarsildoq vafli",f2:"PP granola",f3:"Matcha",g1:"Nokli",g2:"Qulupnay-lichi",g3:"Tarxun",g_hint:"Stakanni bosing — buyurtmaga qo'shamiz",
+  rl_k:"Reels",rl_h:"Qahva haqida<br><em>kino</em> olamiz",rl_all:"Barcha Reels",
+  pl_k:"Manzillar",pl_h:"Shaharda<br><em>4 nuqta</em>",h_d:"Har kuni",h_del:"Yetkazib berish",h_ph:"Telefon",route:"Yo'nalish",
+  ct_k:"Mehmonga kuting",ct_h:"Eng zo'r qahva<br><em>sizning shahringizda</em>",ct_p:"To'rtta nuqtaning istalganiga keling yoki yetkazib berishga buyurtma bering — bir necha daqiqada damlaymiz.",ct_b1:"Yetkazib berishga buyurtma",
+  ft_about:"Qahva 2GO, mualliflik limonadlari va qarsildoq vafli. Toshkentda to'rtta nuqta.",ft_nav:"Navigatsiya",ft_contact:"Aloqa",ft_hours:"Har kuni 08:00–23:00",ft_soc:"Ijtimoiy tarmoqlar",foot:"Sayt-konsepsiya · foto va video — @warumkaffee",
+  c_go:"Buyurtma",open:"Hozir ochiq · 23:00 gacha",closed:"Hozir yopiq · 08:00 da ochamiz",sum:"so'm",added:"Buyurtmada: ",copied:"Buyurtma nusxalandi — qo'ng'iroq qiling!"}
+};
+const ico=n=>`<svg class="i"><use href="#i-${n}"/></svg>`;
+let L=localStorage.getItem('vk_lang')||'ru',TAB='coffee',PL=0,RI=0,ready=false,reelsVisible=false;const cart=[];
+const money=n=>(n*1000).toLocaleString('ru-RU').replace(/ | /g,' ');
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+
+function split(el){
+ const walk=node=>{[...node.childNodes].forEach(n=>{
+  if(n.nodeType===3){const f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(p=>{if(!p)return;if(/^\s+$/.test(p)){f.appendChild(document.createTextNode(' '));return}
+    const w=document.createElement('span');w.className='w';const s=document.createElement('span');s.textContent=p;w.appendChild(s);f.appendChild(w)});n.replaceWith(f)}
+  else if(n.nodeType===1&&n.tagName!=='BR')walk(n)})};
+ walk(el);return el.querySelectorAll('.w>span')}
+
+function applyLang(){
+ document.documentElement.lang=L==='uz'?'uz':'ru';
+ $$('[data-i]').forEach(e=>{const v=T[L][e.dataset.i];if(v!=null)e.textContent=v});
+ $$('[data-ih]').forEach(e=>{const v=T[L][e.dataset.ih];if(v!=null){e.innerHTML=v;if(e.hasAttribute('data-split'))split(e)}});
+ $('#lang').classList.toggle('uz',L==='uz');$$('#lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+ $('#ringTxt').textContent=T[L].ring;
+ const mk=a=>{const s=a.map(t=>`<span>${t}<img src="assets/logo.jpg" alt=""></span>`).join('');return s+s+s+s};
+ $('#mqa').innerHTML=mk(T[L].mq1);$('#mqb').innerHTML=mk(T[L].mq2);
+ renderTabs();renderMenu(false);renderPlaces();renderReels();status();drawCart();
+}
+function renderTabs(){
+ const t=$('#tabs');t.querySelectorAll('button').forEach(b=>b.remove());
+ Object.entries(MENU).forEach(([k,v])=>{const b=document.createElement('button');b.dataset.t=k;b.className=k===TAB?'on':'';b.innerHTML=ico(v.ic)+`<span>${v[L]}</span>`;
+  b.onclick=()=>{if(TAB===k)return;TAB=k;$$('#tabs button').forEach(x=>x.classList.toggle('on',x===b));movePill();renderMenu(true)};t.appendChild(b)});
+ requestAnimationFrame(movePill)}
+function movePill(){const b=$('#tabs button.on'),p=$('#tpill');if(!b)return;p.style.width=b.offsetWidth+'px';p.style.transform=`translateX(${b.offsetLeft}px)`}
+addEventListener('resize',movePill);document.fonts&&document.fonts.ready.then(movePill);
+function renderMenu(anim){
+ const c=MENU[TAB];
+ $('#mgrid').innerHTML=c.items.map((it,i)=>`<div class="mcard"><div class="top"><div class="ic">${ico(c.ic)}</div><span class="num">${String(i+1).padStart(2,'0')}</span></div>
+  <h3>${L==='ru'?it[0]:it[1]}</h3><div class="bt"><div class="pr"><b>${it[2]}k</b><small>${T[L].sum}</small></div>
+  <button class="add" data-k="${i}" aria-label="add">${ico('plus')}</button></div></div>`).join('');
+ const ex=c.extras||[];
+ $('#extras').innerHTML=ex.length?`<span class="t">${T[L].add_t}</span>`+ex.map(x=>`<span class="x">${ico('plus')}${L==='ru'?x[0]:x[1]}${x[2]?`<b>${x[2]}k</b>`:''}</span>`).join(''):'';
+ if(anim&&window.gsap)gsap.from('#mgrid .mcard',{y:40,opacity:0,duration:.8,stagger:.05,ease:'expo.out',clearProps:'all'});
+ $$('#mgrid .add').forEach(b=>b.onclick=()=>{const it=c.items[+b.dataset.k];cart.push({ru:it[0],uz:it[1],p:it[2]});drawCart(true);
+  toast(T[L].added+(L==='ru'?it[0]:it[1]));b.classList.add('ok');b.innerHTML=ico('check');setTimeout(()=>{b.classList.remove('ok');b.innerHTML=ico('plus')},1100)});
+ bindCursor();
+}
+function renderPlaces(){
+ $('#plist').innerHTML=PLACES.map((p,i)=>`<div class="place ${i===PL?'on':''}" data-p="${i}"><div class="pin">${ico('pin')}</div><div><h3>${p[L][0]}</h3><p>${p[L][1]}</p></div>
+  <a class="go" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(p.q)}" target="_blank" rel="noopener" title="${T[L].route}" aria-label="${T[L].route}">${ico('arrow-ur')}</a></div>`).join('');
+ $$('.place').forEach(e=>e.onclick=ev=>{if(ev.target.closest('.go'))return;PL=+e.dataset.p;renderPlaces()});
+ const src='https://maps.google.com/maps?q='+encodeURIComponent(PLACES[PL].q)+'&z=15&hl='+(L==='uz'?'uz':'ru')+'&output=embed';
+ if($('#map').getAttribute('src')!==src)$('#map').setAttribute('src',src);bindCursor();
+}
+function renderReels(){
+ const cf=$('#cflow');
+ if(!cf.children.length){
+  cf.innerHTML=REELS.map((r,i)=>`<div class="rc" data-r="${i}" data-cursor="PLAY" style="background-image:url(assets/p/r-${r.id}.jpg)">
+   <video data-src="assets/v/r-${r.id}.mp4" poster="assets/p/r-${r.id}.jpg" muted loop playsinline preload="none"></video>
+   <div class="ig"><img src="assets/logo.jpg" alt="">warumkaffee</div>
+   <button class="snd" aria-label="sound">${ico('mute')}</button>
+   <div class="play"><i><svg viewBox="0 0 24 24"><use href="#i-play"/></svg></i></div>
+   <div class="meta"><b class="rt"></b><a href="https://www.instagram.com/reel/${r.id}/" target="_blank" rel="noopener" aria-label="Instagram">${ico('arrow-ur')}</a></div></div>`).join('');
+  $('#dots').innerHTML=REELS.map((_,i)=>`<button data-d="${i}" aria-label="${i+1}"></button>`).join('');
+  $$('.rc').forEach(c=>c.addEventListener('click',e=>{if(e.target.closest('a,.snd'))return;if(drag.moved)return;const i=+c.dataset.r;
+   if(i!==RI){RI=i;layoutReels()}else{const v=c.querySelector('video');if(v.paused){v.play();c.classList.remove('paused')}else{v.pause();c.classList.add('paused')}}}));
+  $$('.rc .snd').forEach(b=>b.onclick=e=>{e.stopPropagation();const v=b.closest('.rc').querySelector('video');v.muted=!v.muted;b.innerHTML=ico(v.muted?'mute':'vol')});
+  $$('#dots button').forEach(b=>b.onclick=()=>{RI=+b.dataset.d;layoutReels()});
+ }
+ $$('.rc').forEach((c,i)=>c.querySelector('.rt').textContent=REELS[i][L]);
+ layoutReels();
+}
+function layoutReels(){
+ const n=REELS.length,w=innerWidth<900?.8:1;
+ $$('.rc').forEach((c,i)=>{let d=i-RI;if(d>n/2)d-=n;if(d<-n/2)d+=n;const a=Math.abs(d);
+  c.style.transform=`translateX(${d*60*w}%) translateZ(${-a*220}px) rotateY(${-d*22}deg) scale(${a?.9:1})`;
+  c.style.opacity=a>3?0:1;c.style.zIndex=10-a;c.style.filter=a?`brightness(${1-a*.2})`:'none';c.style.pointerEvents=a>3?'none':'auto';
+  c.classList.toggle('active',a===0);c.classList.remove('paused');
+  const v=c.querySelector('video');
+  if(a<=1&&!v.getAttribute('src'))v.src=v.dataset.src;
+  if(a===0&&reelsVisible){v.play().catch(()=>{})}else{v.pause();if(!v.muted){v.muted=true;c.querySelector('.snd').innerHTML=ico('mute')}}
+ });
+ $$('#dots button').forEach((b,i)=>b.classList.toggle('on',i===RI));
+}
+const step=k=>{RI=(RI+k+REELS.length)%REELS.length;layoutReels()};
+$('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
+const drag={x:null,moved:false};
+$('#cflow').addEventListener('pointerdown',e=>{drag.x=e.clientX;drag.moved=false});
+addEventListener('pointerup',e=>{if(drag.x==null)return;const dx=e.clientX-drag.x;drag.x=null;if(Math.abs(dx)>50){drag.moved=true;step(dx<0?1:-1);setTimeout(()=>drag.moved=false,50)}});
+
+function status(){const n=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tashkent'})),h=n.getHours(),o=h>=8&&h<23;$('#openTxt').textContent=o?T[L].open:T[L].closed;$('#pulse').classList.toggle('off',!o)}
+function drawCart(bump){const c=$('#cart');if(!cart.length){c.classList.remove('show');return}
+ $('#ccnt').textContent=cart.length;if(bump){const e=$('#ccnt');e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump')}
+ $('#clist').textContent=cart.map(i=>i[L]).join(', ');$('#ctot').textContent=money(cart.reduce((s,i)=>s+i.p,0))+' '+T[L].sum;c.classList.add('show')}
+function toast(t){const e=$('#toast');e.querySelector('span').textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1700)}
+window.__addItem=(ru,uz,p)=>{cart.push({ru,uz,p});drawCart(true);toast(T[L].added+(L==='ru'?ru:uz))};
+$('#cx').onclick=()=>{cart.length=0;drawCart()};
+$('#cgo').onclick=()=>{try{navigator.clipboard.writeText('Заказ (Варим кофе): '+cart.map(i=>i.ru).join(', '))}catch(e){}toast(T[L].copied)};
+$$('#lang button').forEach(b=>b.onclick=()=>{if(L===b.dataset.l)return;L=b.dataset.l;localStorage.setItem('vk_lang',L);applyLang();ScrollTrigger.refresh()});
+$('#burger').onclick=()=>document.body.classList.toggle('menu-open');
+$$('#mmenu a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('menu-open')));
+
+/* cursor */
+const cur=$('#cur'),curd=$('#curd'),curl=$('#curl');let cx=-100,cy=-100,rx=-100,ry=-100;
+addEventListener('pointermove',e=>{cx=e.clientX;cy=e.clientY;curd.style.transform=`translate(${cx-3}px,${cy-3}px)`});
+(function loop(){rx+=(cx-rx)*.16;ry+=(cy-ry)*.16;cur.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(loop)})();
+function bindCursor(){$$('a,button,.place,.step').forEach(el=>{if(el._cb)return;el._cb=1;el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
+ $$('[data-cursor]').forEach(el=>{if(el._cl)return;el._cl=1;el.addEventListener('mouseenter',()=>{curl.textContent=el.dataset.cursor;cur.classList.add('label')});el.addEventListener('mouseleave',()=>cur.classList.remove('label'))})}
+
+applyLang();bindCursor();setInterval(status,60000);
+
+/* ================= MOTION ================= */
+gsap.registerPlugin(ScrollTrigger);
+$$('.mag').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();gsap.to(el,{x:(e.clientX-r.left-r.width/2)*.25,y:(e.clientY-r.top-r.height/2)*.35,duration:.6,ease:'power3.out'})});el.addEventListener('mouseleave',()=>gsap.to(el,{x:0,y:0,duration:.9,ease:'elastic.out(1,.4)'}))});
+const lenis=new Lenis({duration:1.15,smoothWheel:true});
+lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+lenis.stop();
+$$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=a.getAttribute('href');if(t==='#top'){e.preventDefault();lenis.scrollTo(0,{duration:1.4});return}if(t.length>1&&$(t)){e.preventDefault();lenis.scrollTo($(t),{offset:-10,duration:1.4})}}));
+
+let lastY=0;
+lenis.on('scroll',({scroll})=>{const n=$('#nav');n.classList.toggle('solid',scroll>40);if(!document.body.classList.contains('menu-open'))n.classList.toggle('hide',scroll>lastY+2&&scroll>500);if(scroll<lastY-2)n.classList.remove('hide');lastY=scroll;
+ $('#progress').style.transform=`scaleX(${scroll/Math.max(1,document.documentElement.scrollHeight-innerHeight)})`});
+['about','menu','reels','places'].forEach(id=>ScrollTrigger.create({trigger:'#'+id,start:'top 50%',end:'bottom 50%',onToggle:s=>$$(`.links a[href="#${id}"]`).forEach(a=>a.classList.toggle('on',s.isActive))}));
+
+// hide initial states before loader leaves
+gsap.set('.hero .h1 .w>span',{yPercent:110});gsap.set('.hero-fade,.hero .live',{y:30,opacity:0});gsap.set('#phone',{y:120,rotate:12,opacity:0});gsap.set('.badge-rot,.price-tag',{scale:0});
+(function(){const o={v:0};gsap.to(o,{v:100,duration:1.5,ease:'power2.inOut',onUpdate:()=>$('#lnum').textContent=Math.round(o.v)+'%',onComplete:intro})})();
+function intro(){
+ gsap.timeline({onComplete:()=>{ready=true;lenis.start()}})
+  .to('#loader',{yPercent:-100,duration:1,ease:'expo.inOut'})
+  .from('#nav .bar',{y:-40,opacity:0,duration:.8,ease:'expo.out',clearProps:'transform'},'-=.4')
+  .to('.hero .live',{y:0,opacity:1,duration:.6},'-=.5')
+  .to('.hero .h1 .w>span',{yPercent:0,duration:1.1,stagger:.06,ease:'expo.out'},'-=.5')
+  .to('.hero-fade',{y:0,opacity:1,duration:.9,stagger:.1,ease:'expo.out'},'-=.8')
+  .to('#phone',{y:0,rotate:3,opacity:1,duration:1.4,ease:'expo.out'},'-=1.2')
+  .to('.badge-rot,.price-tag',{scale:1,duration:1,stagger:.12,ease:'back.out(1.8)'},'-=.9')
+  .add(()=>window.__cupIn&&window.__cupIn(),'-=1.6');
+}
+// headings word reveal (re-split safe: animate on first enter only)
+$$('[data-split]').forEach(h=>{if(h.closest('.hero'))return;ScrollTrigger.create({trigger:h,start:'top 88%',once:true,onEnter:()=>gsap.fromTo(h.querySelectorAll('.w>span'),{yPercent:110},{yPercent:0,duration:1.1,stagger:.05,ease:'expo.out'})});
+ gsap.set(h.querySelectorAll('.w>span'),{yPercent:110})});
+$$('.reveal').forEach(el=>gsap.from(el,{y:50,opacity:0,duration:1.1,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 92%'}}));
+$$('[data-count]').forEach(el=>{const o={v:0},to=+el.dataset.count;gsap.to(o,{v:to,duration:2,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 95%'},onUpdate:()=>el.textContent=Math.round(o.v).toLocaleString('ru-RU').replace(/ | /g,' ')+(el.dataset.suf||'')})});
+// marquee (velocity-reactive)
+let mqx=0,vel=0;lenis.on('scroll',e=>vel=e.velocity||0);
+gsap.ticker.add(()=>{mqx+=.7+Math.min(30,Math.abs(vel))*.35;const a=$('#mqa'),b=$('#mqb'),wa=a.scrollWidth/4,wb=b.scrollWidth/4;
+ a.style.transform=`rotate(-2.2deg) translateX(${-(mqx%wa)}px)`;b.style.transform=`rotate(1.4deg) translateX(${-wb+(mqx%wb)}px)`});
+// parallax
+gsap.to('.collage .v1',{yPercent:-8,ease:'none',scrollTrigger:{trigger:'.collage',scrub:true}});
+gsap.to('.collage .v2',{yPercent:10,ease:'none',scrollTrigger:{trigger:'.collage',scrub:true}});
+gsap.to('.collage .stamp',{rotate:4,ease:'none',scrollTrigger:{trigger:'.collage',scrub:true}});
+gsap.to('#stage',{yPercent:10,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+// phone tilt
+const ph=$('#phone');
+$('#stage').addEventListener('mousemove',e=>{if(!ready)return;const r=e.currentTarget.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;gsap.to(ph,{rotateY:x*14,rotateX:-y*10,duration:.8,ease:'power3.out',transformPerspective:900})});
+$('#stage').addEventListener('mouseleave',()=>gsap.to(ph,{rotateY:0,rotateX:0,duration:1.2,ease:'elastic.out(1,.5)'}));
+// videos play only when visible
+const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting){if(!v.getAttribute('src')&&v.dataset.src)v.src=v.dataset.src;v.play().catch(()=>{})}else v.pause()}),{rootMargin:'150px'});
+$$('.collage video,.step video,#phone video').forEach(v=>io.observe(v));
+ScrollTrigger.create({trigger:'#cflow',start:'top 85%',end:'bottom 15%',onToggle:s=>{reelsVisible=s.isActive;layoutReels()}});
+$$('.step').forEach(s=>s.addEventListener('click',()=>s.classList.toggle('open')));
+addEventListener('resize',()=>layoutReels());
+</script>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const canvas=document.getElementById('cup3d');
+const R=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+const mobile=innerWidth<900;
+R.setPixelRatio(Math.min(devicePixelRatio,mobile?1.5:2));R.toneMapping=THREE.ACESFilmicToneMapping;R.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(30,1,.1,100);cam.position.set(0,0,12);
+scene.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),.04).texture;
+scene.add(new THREE.AmbientLight(0xffffff,.3));
+const key=new THREE.DirectionalLight(0xffffff,2.4);key.position.set(5,6,6);scene.add(key);
+const rim=new THREE.PointLight(0xFFD400,60,25);rim.position.set(-5,2,-3);scene.add(rim);
+function size(){const r=canvas.getBoundingClientRect();if(!r.width)return;R.setSize(r.width,r.height,false);cam.aspect=r.width/r.height;cam.updateProjectionMatrix()}
+size();addEventListener('resize',size);
+
+const tc=document.createElement('canvas');tc.width=2048;tc.height=512;const g=tc.getContext('2d');
+const tex=new THREE.CanvasTexture(tc);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;
+function paint(img){g.fillStyle='#FFD400';g.fillRect(0,0,2048,512);g.fillStyle='#111';g.fillRect(0,280,2048,232);
+ if(img)for(const x of [256,1280])g.drawImage(img,x,0,512,512);
+ g.textAlign='center';g.font='800 46px Montserrat,Arial';g.fillStyle='#111';
+ for(const x of [768,1792])g.fillText('А ЧЁ НЕ',x,160),g.fillText('ВАРИТЬ-ТО?',x,215);
+ g.fillStyle='#fff';g.font='700 32px Montserrat,Arial';for(const x of [768,1792])g.fillText('КОФЕ 2GO',x,370),g.fillText('ТАШКЕНТ',x,415);tex.needsUpdate=true}
+paint(null);
+const im=new Image();im.onload=()=>{document.fonts.ready.then(()=>{try{paint(im)}catch(e){paint(null)}})};im.src='assets/logo.jpg';
+
+const cup=new THREE.Group();
+const prof=[new THREE.Vector2(0,-1.5)];for(let i=0;i<=30;i++){const y=-1.5+i*.1;prof.push(new THREE.Vector2(.78+(y+1.5)/3*.32,y))}
+cup.add(new THREE.Mesh(new THREE.LatheGeometry(prof,96),new THREE.MeshPhysicalMaterial({color:0xf3ece0,roughness:.6,clearcoat:.3})));
+const sp=[];for(let i=0;i<=14;i++){const y=-.9+i*.13;sp.push(new THREE.Vector2(.78+(y+1.5)/3*.32+.022,y))}
+const sleeve=new THREE.Mesh(new THREE.LatheGeometry(sp,128),new THREE.MeshPhysicalMaterial({map:tex,roughness:.45,clearcoat:.6,clearcoatRoughness:.25}));
+cup.add(sleeve);
+const lidM=new THREE.MeshPhysicalMaterial({color:0x121212,roughness:.3,clearcoat:1});
+const l1=new THREE.Mesh(new THREE.CylinderGeometry(1.14,1.14,.16,96),lidM);l1.position.y=1.55;cup.add(l1);
+const l2=new THREE.Mesh(new THREE.CylinderGeometry(.96,1.1,.22,96),lidM);l2.position.y=1.73;cup.add(l2);
+const tor=new THREE.Mesh(new THREE.TorusGeometry(1.12,.06,16,96),lidM);tor.rotation.x=Math.PI/2;tor.position.y=1.5;cup.add(tor);
+const sip=new THREE.Mesh(new THREE.CapsuleGeometry(.07,.3,6,12),new THREE.MeshStandardMaterial({color:0}));sip.rotation.z=Math.PI/2;sip.position.set(0,1.85,.62);cup.add(sip);
+scene.add(cup);
+
+const sc=document.createElement('canvas');sc.width=sc.height=128;const sg=sc.getContext('2d');const rg=sg.createRadialGradient(64,64,0,64,64,64);rg.addColorStop(0,'rgba(255,255,255,.5)');rg.addColorStop(1,'rgba(255,255,255,0)');sg.fillStyle=rg;sg.fillRect(0,0,128,128);
+const st=new THREE.CanvasTexture(sc),steam=[];for(let i=0;i<12;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:st,transparent:true,depthWrite:false,opacity:0}));s.userData.t=i/12;cup.add(s);steam.push(s)}
+
+const bg=new THREE.SphereGeometry(.17,28,18);bg.scale(1,.7,1.4);
+{const p=bg.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);if(y>0)p.setY(i,y-Math.exp(-x*x*700)*.06)}bg.computeVertexNormals()}
+const N=mobile?10:14,beans=new THREE.InstancedMesh(bg,new THREE.MeshPhysicalMaterial({color:0x4b2a16,roughness:.32,clearcoat:.8}),N);scene.add(beans);
+const bd=[...Array(N)].map(()=>({r:1.8+Math.random()*1.8,a:Math.random()*6.28,y:(Math.random()-.5)*4.4,s:.2+Math.random()*.3,rx:Math.random()*6,ry:Math.random()*6,sc:.7+Math.random()*.6,z:(Math.random()-.5)*2}));
+const dm=new THREE.Object3D();
+
+let intro=0,on=false,mx=0,my=0,scrollP=0;window.__cupIn=()=>on=true;setTimeout(()=>on=true,4500);
+addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+addEventListener('scroll',()=>{scrollP=Math.min(1,scrollY/innerHeight)},{passive:true});
+let visible=true;new IntersectionObserver(e=>visible=e[0].isIntersecting).observe(canvas);
+const clock=new THREE.Clock();
+(function tick(){requestAnimationFrame(tick);if(!visible)return;const t=clock.getElapsedTime();
+ if(on)intro=Math.min(1,intro+.014);const e=1-Math.pow(1-intro,4);
+ const bx=mobile?-.55:-1.05,by=mobile?-1.45:-1.55;
+ cup.position.set(bx+mx*.25,by+Math.sin(t*1.3)*.1-(1-e)*6+scrollP*2.2,1.5);
+ cup.rotation.set(-.08+my*.12+scrollP*.4,t*.4+mx*.6+scrollP*3+(1-e)*4,-.2+(1-e)*.6);
+ cup.scale.setScalar((mobile?.6:.72)*(.5+.5*e));
+ steam.forEach((s,i)=>{s.userData.t+=.004;const k=s.userData.t%1;s.position.set(Math.sin(k*6+i)*.25,1.95+k*2,0);s.scale.setScalar(.4+k*1.3);s.material.opacity=Math.sin(k*Math.PI)*.3*e});
+ bd.forEach((b,i)=>{const a=b.a+t*b.s*.35;dm.position.set(cup.position.x+Math.cos(a)*b.r*.8,cup.position.y+.6+b.y*.6+Math.sin(t*b.s+i)*.25,Math.sin(a)*b.r*.5+b.z);dm.rotation.set(b.rx+t*b.s,b.ry+t*b.s*.7,0);dm.scale.setScalar(b.sc*e);dm.updateMatrix();beans.setMatrixAt(i,dm.matrix)});
+ beans.instanceMatrix.needsUpdate=true;R.render(scene,cam)})();
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+const box=document.getElementById('lemon3d'),canvas=document.getElementById('lemonCanvas');
+const R=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(28,1,.1,100);
+scene.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),.03).texture;
+const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(3,5,5);scene.add(key);
+const back=new THREE.PointLight(0xFFD400,30,14);back.position.set(0,1.5,-3);scene.add(back);
+scene.add(new THREE.AmbientLight(0xffffff,.25));
+
+function canvasTex(w,h,draw,srgb=true){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);if(srgb)t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t}
+/* warm backdrop so the transparent plastic has something to refract */
+
+/* condensation droplets */
+const dropBump=canvasTex(1024,1024,(g,w,h)=>{g.fillStyle='#000';g.fillRect(0,0,w,h);for(let i=0;i<1500;i++){const x=Math.random()*w,y=Math.random()*h,r=Math.random()<.9?1+Math.random()*3:4+Math.random()*6;const gr=g.createRadialGradient(x-r*.3,y-r*.3,0,x,y,r);gr.addColorStop(0,'#fff');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.beginPath();g.ellipse(x,y,r,r*1.25,0,0,7);g.fill()}},false);
+const strawTex=canvasTex(64,512,(g,w,h)=>{g.fillStyle='#FFD400';g.fillRect(0,0,w,h);g.fillStyle='#111';for(let y=-64;y<h+64;y+=32){g.beginPath();g.moveTo(0,y);g.lineTo(w,y+28);g.lineTo(w,y+44);g.lineTo(0,y+16);g.fill()}});
+strawTex.wrapS=strawTex.wrapT=THREE.RepeatWrapping;strawTex.repeat.set(1,3);
+const stickerTex=canvasTex(512,512,()=>{});
+const logoImg=new Image();logoImg.onload=()=>{const g=stickerTex.image.getContext('2d');g.clearRect(0,0,512,512);g.save();g.beginPath();g.arc(256,256,252,0,7);g.clip();g.drawImage(logoImg,0,0,512,512);g.restore();stickerTex.needsUpdate=true};logoImg.src='assets/logo.jpg';
+
+const plastic=new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.04,metalness:0,transparent:true,opacity:.16,clearcoat:1,clearcoatRoughness:.05,bumpMap:dropBump,bumpScale:.5,side:THREE.DoubleSide,depthWrite:false,envMapIntensity:2.2,specularIntensity:1});
+const rimM=new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.05,transparent:true,opacity:.55,clearcoat:1,envMapIntensity:2});
+const iceM=new THREE.MeshPhysicalMaterial({color:0xf2fbff,roughness:.12,transparent:true,opacity:.62,clearcoat:1,clearcoatRoughness:.1,envMapIntensity:2,depthWrite:false});
+
+const H=2.3,Y0=-1.15,RB=.5,RT=.7;const rAt=y=>RB+(y-Y0)/H*(RT-RB);
+function shellGeo(){const pts=[new THREE.Vector2(0,Y0),new THREE.Vector2(RB,Y0),new THREE.Vector2(RB+.005,Y0+.02)];
+ for(let i=1;i<=24;i++){const y=Y0+i/24*H;pts.push(new THREE.Vector2(rAt(y),y))}
+ pts.push(new THREE.Vector2(RT+.012,Y0+H+.01),new THREE.Vector2(RT+.012,Y0+H+.035),new THREE.Vector2(RT-.018,Y0+H+.035));
+ for(let i=24;i>=0;i--){const y=Y0+.06+i/24*(H-.06);pts.push(new THREE.Vector2(rAt(y)-.018,y))}
+ pts.push(new THREE.Vector2(0,Y0+.06));return new THREE.LatheGeometry(pts,80)}
+function liquidGeo(top,c1,c2){const pts=[new THREE.Vector2(0,Y0+.065)];for(let i=0;i<=20;i++){const y=Y0+.065+i/20*(top-Y0-.065);pts.push(new THREE.Vector2(rAt(y)-.024,y))}
+ pts.push(new THREE.Vector2(rAt(top)-.06,top+.012),new THREE.Vector2(0,top+.012));
+ const g=new THREE.LatheGeometry(pts,64),p=g.attributes.position,col=[],a=new THREE.Color(c1),b=new THREE.Color(c2),t=new THREE.Color();
+ for(let i=0;i<p.count;i++){const k=THREE.MathUtils.clamp((p.getY(i)-Y0)/(top-Y0),0,1);t.copy(a).lerp(b,Math.pow(k,1.2));col.push(t.r,t.g,t.b)}
+ g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));return g}
+
+const DRINKS=[
+ {ru:"Грушевый лимонад",uz:"Nokli limonad",p:60,c1:'#c97400',c2:'#ffcf2e',top:.62,att:'#f29d00'},
+ {ru:"Клубника-личи",uz:"Qulupnay-lichi",p:50,c1:'#7a0419',c2:'#ff3f63',top:.7,att:'#d61a3c'},
+ {ru:"Тархун",uz:"Tarxun",p:40,c1:'#145c0c',c2:'#79d136',top:.58,att:'#3f9d1c'}];
+const cups=[],bubbles=[],shadowTex=canvasTex(256,128,(g)=>{const gr=g.createRadialGradient(128,64,0,128,64,120);gr.addColorStop(0,'rgba(0,0,0,.75)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,256,128)});
+DRINKS.forEach((d,i)=>{
+ const grp=new THREE.Group();
+ grp.add(new THREE.Mesh(liquidGeo(d.top,d.c1,d.c2),Object.assign(new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:.22,clearcoat:.35,emissive:new THREE.Color(d.att),emissiveIntensity:.32,envMapIntensity:.45,transparent:true,opacity:.86}),{})));
+ for(let k=0;k<5;k++){const s=.26+Math.random()*.09;const ice=new THREE.Mesh(new RoundedBoxGeometry(s,s*.92,s,3,.05),iceM);
+  const a=k/5*6.28+Math.random()*.6,r=.12+Math.random()*.15;ice.position.set(Math.cos(a)*r,d.top-.02-Math.random()*.32+(k<3?.16:0),Math.sin(a)*r);ice.renderOrder=3;ice.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);grp.add(ice)}
+ const bm=new THREE.InstancedMesh(new THREE.SphereGeometry(.018,8,6),new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:0,transmission:.6,transparent:true,opacity:.85}),26);
+ grp.add(bm);bubbles.push({m:bm,top:d.top,d:[...Array(26)].map(()=>({a:Math.random()*6.28,r:Math.random()*.38,y:Y0+.1+Math.random()*(d.top-Y0),s:.004+Math.random()*.008,sc:.5+Math.random()}))});
+ const shell=new THREE.Mesh(shellGeo(),plastic);shell.renderOrder=5;grp.add(shell);
+ const rim=new THREE.Mesh(new THREE.TorusGeometry(RT+.002,.022,10,80),rimM);rim.rotation.x=Math.PI/2;rim.position.y=Y0+H+.02;grp.add(rim);
+ const yc=-.12,hh=.68,tl=hh/rAt(yc);
+ const st=new THREE.Mesh(new THREE.CylinderGeometry(rAt(yc+hh/2)+.004,rAt(yc-hh/2)+.004,hh,40,1,true,-tl/2,tl),new THREE.MeshPhysicalMaterial({map:stickerTex,transparent:true,alphaTest:.4,roughness:.35,clearcoat:.5}));
+ st.position.y=yc;st.renderOrder=6;grp.add(st);
+ const straw=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,2.5,20),new THREE.MeshPhysicalMaterial({map:strawTex,roughness:.35,clearcoat:.6}));
+ straw.position.set(.2,.6,-.1);straw.rotation.set(.1,0,-.22);grp.add(straw);
+ const sh=new THREE.Mesh(new THREE.PlaneGeometry(1.9,.65),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.y=Y0-.01;
+ const root=new THREE.Group();root.add(grp,sh);root.userData={grp,sh,d,lift:0,phase:i*2.1};scene.add(root);cups.push(root);
+});
+
+function layout(){const r=box.getBoundingClientRect();if(!r.width)return;R.setSize(r.width,r.height,false);cam.aspect=r.width/r.height;
+ const t=Math.tan(THREE.MathUtils.degToRad(cam.fov/2));const need=cam.aspect<.95?4.6:5.4;const d=Math.max(4.4/(2*t),need/(2*t*cam.aspect));
+ cam.position.set(0,.45,d);cam.lookAt(0,.2,0);const Hh=2*d*t,W=Hh*cam.aspect,sp=W/3,s=Math.min(1,sp/2.2);
+ cups.forEach((c,i)=>{c.position.set((i-1)*sp,-Hh/2+Hh*.3+1.15*s,0);c.scale.setScalar(s)})}
+layout();addEventListener('resize',layout);new ResizeObserver(layout).observe(box);
+
+const ray=new THREE.Raycaster(),mp=new THREE.Vector2(-9,-9);let hover=-1,mx=0;
+canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();mp.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);mx=mp.x});
+canvas.addEventListener('pointerleave',()=>{mp.set(-9,-9);hover=-1;mx=0});
+canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();mp.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);pick();if(hover<0)return;const c=cups[hover];c.userData.lift=1.8;const d=c.userData.d;window.__addItem&&window.__addItem(d.ru,d.uz,d.p)});
+function pick(){ray.setFromCamera(mp,cam);let best=-1;cups.forEach((c,i)=>{if(ray.intersectObject(c.userData.grp,true).length)best=i});hover=best;canvas.style.cursor=best>=0?'pointer':'default'}
+
+let vis=false;new IntersectionObserver(e=>vis=e[0].isIntersecting,{rootMargin:'200px'}).observe(box);
+const clock=new THREE.Clock(),dm=new THREE.Object3D();
+(function tick(){requestAnimationFrame(tick);if(!vis)return;const t=clock.getElapsedTime();pick();
+ cups.forEach((c,i)=>{const u=c.userData;const tgt=hover===i?1:0;u.lift=u.lift>1?u.lift-.03:u.lift+(tgt-u.lift)*.1;
+  u.grp.position.y=Math.sin(t*1.1+u.phase)*.05+Math.min(u.lift,1.4)*.22;
+  u.grp.rotation.y=Math.sin(t*.45+u.phase)*.45+mx*.3;u.grp.rotation.z=Math.sin(t*.7+u.phase)*.02;
+  u.sh.scale.setScalar(1-Math.min(u.lift,1)*.18);u.sh.material.opacity=1-Math.min(u.lift,1)*.35});
+ bubbles.forEach(b=>{b.d.forEach((q,k)=>{q.y+=q.s;if(q.y>b.top){q.y=Y0+.1;q.a=Math.random()*6.28}const rr=Math.min(q.r,rAt(q.y)-.07);dm.position.set(Math.cos(q.a)*rr,q.y,Math.sin(q.a)*rr);dm.scale.setScalar(q.sc);dm.updateMatrix();b.m.setMatrixAt(k,dm.matrix)});b.m.instanceMatrix.needsUpdate=true});
+ R.render(scene,cam)})();
+</script>
+
+</body>
+</html>

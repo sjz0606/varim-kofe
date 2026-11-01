@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Варим кофе — кофе 2GO в Ташкенте</title>
+<meta name="description" content="Варим кофе в Ташкенте. А чё не варить-то? Кофе 2GO, авторские лимонады, вафли и ПП гранола. 4 точки в городе, с 08:00 до 23:00.">
+<meta name="theme-color" content="#FFD400">
+<meta property="og:title" content="Варим кофе — кофе 2GO в Ташкенте">
+<meta property="og:description" content="4 точки в городе. Кофе, лимонады, вафли. С 08:00 до 23:00.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23FFD400'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Arial Black' font-weight='900' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--y:#FFD400;--y2:#FFE45C;--k:#111;--k2:#1b1b1b;--cream:#f7f1e6;--muted:#8b8b8b;--r:28px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--k);color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,.u{font-family:Unbounded,system-ui,sans-serif;letter-spacing:-.02em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* loader */
+#loader{position:fixed;inset:0;background:var(--y);z-index:100;display:grid;place-items:center;transition:clip-path 1s cubic-bezier(.77,0,.18,1);clip-path:circle(150% at 50% 50%)}
+#loader.done{clip-path:circle(0% at 50% 50%)}
+#loader .logo{width:120px;animation:pulse 1.2s ease-in-out infinite}
+#loader .bar{width:160px;height:4px;background:#0002;border-radius:4px;margin-top:22px;overflow:hidden}
+#loader .bar i{display:block;height:100%;width:0;background:var(--k);transition:width .3s}
+@keyframes pulse{50%{transform:scale(1.08) rotate(-4deg)}}
+
+/* 3D canvas */
+#scene{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:20;transition:.4s}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:78px}
+nav.scrolled{background:#111c;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:10px;font-family:Unbounded;font-weight:900;font-size:15px;line-height:1}
+.brand svg{width:42px;height:42px}
+.links{display:flex;gap:28px;font-weight:500;font-size:15px}
+.links a{opacity:.75;transition:.2s}.links a:hover{opacity:1;color:var(--y)}
+.right{display:flex;gap:10px;align-items:center}
+.lang{display:flex;background:#ffffff14;border-radius:99px;padding:3px}
+.lang button{background:none;border:0;color:#fff;font:700 12px Manrope;padding:7px 11px;border-radius:99px;cursor:pointer;opacity:.6}
+.lang button.on{background:var(--y);color:var(--k);opacity:1}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--y);color:var(--k);font-weight:700;padding:15px 26px;border-radius:99px;border:0;cursor:pointer;font-size:15px;transition:transform .25s,box-shadow .25s;font-family:Manrope}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px #ffd40055}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid #ffffff40}
+.btn.ghost:hover{border-color:var(--y);color:var(--y);box-shadow:none}
+.btn.sm{padding:10px 18px;font-size:14px}
+
+/* hero */
+section{position:relative;z-index:2}
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 80px}
+.hero .wrap{width:100%}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--y)}
+.kicker:before{content:"";width:34px;height:2px;background:var(--y)}
+.hero h1{font-size:clamp(46px,7vw,104px);font-weight:900;line-height:.92;margin:22px 0 26px;max-width:9ch}
+.hero h1 .y{color:var(--y);display:block}
+.hero p.lead{font-size:clamp(17px,1.6vw,21px);color:#cfcfcf;max-width:440px;line-height:1.55}
+.hero .cta{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap}
+.chips{display:flex;gap:10px;margin-top:40px;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:99px;background:#ffffff0f;border:1px solid #ffffff1a;font-size:14px;backdrop-filter:blur(6px)}
+.chip b{color:var(--y)}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 4px #3ddc8433}
+.dot.off{background:#ff5a5a;box-shadow:0 0 0 4px #ff5a5a33}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.5;display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-hint i{width:1px;height:44px;background:linear-gradient(var(--y),transparent);animation:drop 1.8s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* marquee */
+.marquee{background:var(--y);color:var(--k);overflow:hidden;padding:20px 0;transform:rotate(-2deg);margin:40px -20px;position:relative;z-index:3;box-shadow:0 20px 60px #0008}
+.marquee .track{display:flex;gap:46px;white-space:nowrap;animation:mq 26s linear infinite;width:max-content}
+.marquee span{font-family:Unbounded;font-weight:900;font-size:clamp(22px,3vw,38px);display:flex;align-items:center;gap:46px}
+.marquee span:after{content:"✦";font-size:.7em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* about */
+.about{padding:140px 0 120px}
+.about .grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about h2,.sec-title{font-size:clamp(34px,4.6vw,64px);font-weight:900;line-height:1}
+.about h2 em,.sec-title em{font-style:normal;color:var(--y)}
+.about p{color:#bdbdbd;font-size:18px;line-height:1.65;margin-top:24px;max-width:520px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:40px}
+.stat{background:#ffffff0a;border:1px solid #ffffff14;border-radius:22px;padding:24px;backdrop-filter:blur(8px)}
+.stat b{font-family:Unbounded;font-size:40px;font-weight:900;color:var(--y);display:block;line-height:1}
+.stat span{font-size:14px;color:#aaa;margin-top:8px;display:block}
+
+/* menu */
+.menu{background:var(--cream);color:var(--k);padding:130px 0;border-radius:48px 48px 0 0;margin-top:40px}
+.menu .head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.menu .sec-title em{color:var(--k);background:var(--y);padding:0 .15em;border-radius:.15em}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{border:1.5px solid #0002;background:transparent;border-radius:99px;padding:12px 20px;font:700 14px Manrope;cursor:pointer;transition:.2s;color:var(--k)}
+.tabs button.on{background:var(--k);color:var(--y);border-color:var(--k)}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:46px;perspective:1000px}
+.mcard{background:#fff;border-radius:24px;padding:24px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;transition:transform .15s ease-out,box-shadow .3s;box-shadow:0 1px 0 #0000000d}
+.mcard:hover{box-shadow:0 24px 50px #0000001f}
+.mcard .ic{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:26px}
+.mcard h3{font-size:18px;font-weight:700;margin-top:18px;line-height:1.2}
+.mcard .p{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.mcard .p b{font-family:Unbounded;font-size:20px}
+.mcard .p small{color:#888;font-size:13px}
+.mcard .add{width:40px;height:40px;border-radius:50%;background:var(--y);border:0;font-size:22px;font-weight:700;cursor:pointer;transition:.2s;color:var(--k)}
+.mcard .add:hover{transform:rotate(90deg) scale(1.1)}
+.mcard.anim{animation:pop .5s backwards}
+@keyframes pop{from{opacity:0;transform:translateY(30px) rotateX(20deg)}}
+.extras{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.extras .t{font-weight:700;margin-right:6px}
+.extras span{background:#fff;border-radius:99px;padding:9px 15px;font-size:14px}
+.extras span b{margin-left:6px}
+
+/* lemonades */
+.lemon{background:var(--cream);color:var(--k);padding:30px 0 140px}
+.lemon .box{background:var(--k);color:#fff;border-radius:40px;padding:70px 60px;display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:center;overflow:hidden;position:relative}
+.lemon .box p{color:#bbb;margin-top:18px;line-height:1.6;font-size:17px}
+.glasses{display:flex;justify-content:center;gap:22px;perspective:900px;height:330px;align-items:flex-end}
+.glass{width:96px;height:200px;position:relative;transform-style:preserve-3d;animation:float 4s ease-in-out infinite;cursor:pointer}
+.glass:nth-child(2){animation-delay:-1.3s;height:240px}.glass:nth-child(3){animation-delay:-2.6s}
+.glass .body{position:absolute;inset:0;border-radius:10px 10px 26px 26px;background:linear-gradient(90deg,#ffffff30,#ffffff08 40%,#ffffff25);border:2px solid #ffffff40;overflow:hidden}
+.glass .liq{position:absolute;left:0;right:0;bottom:0;height:78%;background:var(--c);transition:height .6s}
+.glass .liq:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,#fff6 2px,transparent 3px) 0 0/22px 30px,radial-gradient(circle at 70% 60%,#fff5 2px,transparent 3px) 0 0/26px 34px;animation:bub 3s linear infinite}
+.glass .ice{position:absolute;width:30px;height:26px;background:#ffffff55;border-radius:6px;left:16px;top:28%;transform:rotate(18deg)}
+.glass .ice+.ice{left:48px;top:40%;transform:rotate(-12deg)}
+.glass .straw{position:absolute;width:8px;height:120px;background:repeating-linear-gradient(45deg,var(--y) 0 8px,#111 8px 16px);left:62%;top:-60px;transform:rotate(12deg);border-radius:4px}
+.glass .lbl{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:13px;font-weight:700;color:#ddd}
+.glass:hover .liq{height:92%}
+@keyframes float{50%{transform:translateY(-14px) rotateY(14deg)}}
+@keyframes bub{to{background-position:0 -60px,0 -68px}}
+.food{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.food div span{font-size:15px}.food div{font-size:20px;background:#ffffff10;border-radius:18px;padding:14px 18px;display:flex;gap:10px;align-items:center;font-weight:700}
+
+/* places */
+.places{background:var(--y);color:var(--k);padding:130px 0;border-radius:48px 48px 0 0;box-shadow:0 -60px 0 var(--cream)}
+.menu .kicker:before,.places .kicker:before{background:#111}
+.places .grid{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;margin-top:50px;align-items:start}
+.plist{display:flex;flex-direction:column;gap:12px}
+.place{background:#ffffff70;border-radius:22px;padding:22px 24px;cursor:pointer;transition:.25s;border:2px solid transparent;display:flex;gap:16px;align-items:center}
+.place .n{font-family:Unbounded;font-weight:900;font-size:28px;width:44px;opacity:.35}
+.place h3{font-size:17px;font-weight:700}.place p{font-size:14px;opacity:.7;margin-top:4px}
+.place.on{background:var(--k);color:#fff}.place.on .n{color:var(--y);opacity:1}
+.mapbox{border-radius:30px;overflow:hidden;height:470px;background:#111;box-shadow:0 30px 60px #0003}
+.mapbox iframe{width:100%;height:100%;border:0;filter:grayscale(.2) contrast(1.05)}
+.hours{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap}
+.hours div{background:var(--k);color:#fff;border-radius:18px;padding:16px 20px}
+.hours b{color:var(--y);font-family:Unbounded;font-size:20px;display:block}
+
+/* contact */
+.contact{padding:140px 0 60px;text-align:center}
+.contact h2{font-size:clamp(40px,7vw,100px);font-weight:900;line-height:.95}
+.contact h2 em{font-style:normal;color:var(--y)}
+.contact .cta{display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+footer{position:relative;z-index:2;border-top:1px solid #ffffff14;padding:30px 0;color:#777;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* cart */
+#cart{position:fixed;right:24px;bottom:24px;z-index:30;background:var(--y);color:var(--k);border-radius:24px;padding:16px 18px 16px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 20px 50px #0006;transform:translateY(160%);transition:transform .5s cubic-bezier(.2,1.4,.4,1)}
+#cart.show{transform:none}
+#cart .c{font-size:13px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cart b{font-family:Unbounded;font-size:18px;display:block}
+#cart .btn{background:var(--k);color:var(--y);padding:12px 18px}
+#cart .x{background:none;border:0;font-size:22px;cursor:pointer;opacity:.6}
+.toast{position:fixed;left:50%;bottom:110px;transform:translate(-50%,20px);background:#fff;color:#111;padding:12px 18px;border-radius:14px;font-weight:700;font-size:14px;opacity:0;transition:.3s;z-index:40;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.reveal{opacity:0;transform:translateY(50px)}
+
+@media(max-width:900px){
+ .links{display:none}
+ .about .grid,.lemon .box,.places .grid{grid-template-columns:1fr}
+ .lemon .box{padding:46px 26px}
+ .hero{align-items:flex-end;padding-bottom:110px;padding-top:46vh}
+ .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 30%,#111e 58%);pointer-events:none}
+ .hero .wrap{position:relative}
+ .hero h1{font-size:clamp(44px,13vw,80px)}
+ .mapbox{height:340px}
+ #cart{left:12px;right:12px;bottom:12px}
+ .menu,.places{border-radius:32px 32px 0 0}
+}
+</style>
+</head>
+<body>
+
+<div id="loader"><div style="text-align:center">
+  <svg class="logo" viewBox="0 0 200 200"><use href="#logo"/></svg>
+  <div class="bar"><i id="lbar"></i></div>
+</div></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <clipPath id="lc"><circle cx="100" cy="100" r="100"/></clipPath>
+    <symbol id="logo" viewBox="0 0 200 200">
+      <g clip-path="url(#lc)">
+        <rect width="200" height="200" fill="#FFD400"/>
+        <rect y="122" width="200" height="78" fill="#111"/>
+      </g>
+      <path d="M74 112V52c0-16 12-26 30-26 17 0 28 9 28 23 0 9-5 16-13 19 11 3 18 11 18 22 0 14-10 22-27 22H96V98h11c6 0 10-3 10-8s-4-8-10-8h-9V70h6c6 0 9-3 9-8 0-4-3-7-9-7-6 0-9 4-9 10v47z" fill="#111"/>
+      <text x="100" y="152" text-anchor="middle" font-family="Unbounded,Arial Black" font-weight="900" font-size="21" fill="#fff">ВАРИМ</text>
+      <text x="100" y="177" text-anchor="middle" font-family="Unbounded,Arial Black" font-weight="900" font-size="21" fill="#fff">КОФЕ</text>
+    </symbol>
+  </defs>
+</svg>
+
+<canvas id="scene"></canvas>
+
+<nav id="nav"><div class="wrap">
+  <a class="brand" href="#top"><svg viewBox="0 0 200 200"><use href="#logo"/></svg><span>ВАРИМ<br>КОФЕ</span></a>
+  <div class="links">
+    <a href="#about" data-i="nav_about">О нас</a>
+    <a href="#menu" data-i="nav_menu">Меню</a>
+    <a href="#lemon" data-i="nav_lemon">Лимонады</a>
+    <a href="#places" data-i="nav_places">Адреса</a>
+  </div>
+  <div class="right">
+    <div class="lang"><button data-l="ru" class="on">RU</button><button data-l="uz">UZ</button></div>
+    <a class="btn sm" href="tel:+998933866712" data-i="nav_order">Заказать</a>
+  </div>
+</div></nav>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div class="kicker" data-i="kicker">Кофе 2GO · Ташкент</div>
+  <h1><span data-i="h1a">Варим кофе.</span><span class="y" data-i="h1b">А чё не варить-то?</span></h1>
+  <p class="lead" data-i="lead">Четыре точки в городе, где кофе варят для тебя с 8 утра. Пришёл, взял с собой и отправился покорять мир.</p>
+  <div class="cta">
+    <a class="btn" href="#menu"><span data-i="cta_menu">Смотреть меню</span> →</a>
+    <a class="btn ghost" href="#places" data-i="cta_places">Найти точку</a>
+  </div>
+  <div class="chips">
+    <div class="chip"><span class="dot" id="odot"></span><span id="open"></span></div>
+    <div class="chip"><b>★ 4,9</b><span data-i="chip_g">Google Maps</span></div>
+    <div class="chip"><b>5 200+</b><span data-i="chip_ig">в Instagram</span></div>
+  </div>
+</div>
+<div class="scroll-hint"><span data-i="scroll">листай</span><i></i></div>
+</section>
+
+<div class="marquee"><div class="track" id="mq"></div></div>
+
+<section class="about" id="about"><div class="wrap grid">
+  <div></div>
+  <div class="reveal">
+    <div class="kicker" data-i="about_k">О нас</div>
+    <h2 style="margin-top:18px" data-ih="about_h">Пара столиков. <em>Огромное</em> комьюнити.</h2>
+    <p data-i="about_p">«Варим кофе» — это четыре точки формата 2GO. У нас всего пара столиков, но это не помешало нам собрать крутое комьюнити. Варим эспрессо, раф и айс-кофе, делаем авторские лимонады, печём хрустящие вафли — и ждём тебя в гости на топовый кофе в городе.</p>
+    <div class="stats">
+      <div class="stat"><b data-count="4">0</b><span data-i="st1">точки в Ташкенте</span></div>
+      <div class="stat"><b>08–23</b><span data-i="st2">варим каждый день</span></div>
+      <div class="stat"><b data-count="30" data-dec="1">0</b><span data-i="st3">напитков в меню</span></div>
+      <div class="stat"><b>4,9★</b><span data-i="st4">рейтинг в Google</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="menu" id="menu"><div class="wrap">
+  <div class="head reveal">
+    <div><div class="kicker" style="color:#111" data-i="menu_k">Меню</div>
+    <h2 class="sec-title" style="margin-top:18px" data-ih="menu_h">Что <em>варим</em> сегодня</h2></div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <div class="mgrid" id="mgrid"></div>
+  <div class="extras" id="extras"></div>
+</div></section>
+
+<section class="lemon" id="lemon"><div class="wrap"><div class="box reveal">
+  <div>
+    <div class="kicker" data-i="lem_k">Авторские лимонады</div>
+    <h2 class="sec-title" style="margin-top:18px" data-ih="lem_h">Хочется чего-то <em>холодненького?</em></h2>
+    <p data-i="lem_p">Груша, клубника-личи, манго-маракуйя, лимон-базилик — свои рецепты, много льда и ни капли скуки. А к ним — хрустящие вафли и ПП гранола.</p>
+    <div class="food"><div>🧇 <span data-i="f1">Хрустящие вафли</span></div><div>🥣 <span data-i="f2">ПП гранола</span></div><div>🍵 <span data-i="f3">Матча</span></div></div>
+  </div>
+  <div class="glasses">
+    <div class="glass" style="--c:linear-gradient(#ffe56b,#f5b400)"><div class="straw"></div><div class="body"><div class="liq"></div><div class="ice"></div><div class="ice"></div></div><div class="lbl" data-i="g1">Груша · 60k</div></div>
+    <div class="glass" style="--c:linear-gradient(#ff9a7a,#e2304a)"><div class="straw"></div><div class="body"><div class="liq"></div><div class="ice"></div><div class="ice"></div></div><div class="lbl" data-i="g2">Клубника-личи · 50k</div></div>
+    <div class="glass" style="--c:linear-gradient(#c6f08a,#5fae2e)"><div class="straw"></div><div class="body"><div class="liq"></div><div class="ice"></div><div class="ice"></div></div><div class="lbl" data-i="g3">Тархун · 40k</div></div>
+  </div>
+</div></div></section>
+
+<section class="places" id="places"><div class="wrap">
+  <div class="reveal">
+    <div class="kicker" style="color:#111" data-i="pl_k">Адреса</div>
+    <h2 class="sec-title" style="margin-top:18px" data-i="pl_h">4 точки в городе</h2>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="plist" id="plist"></div>
+      <div class="hours">
+        <div><span data-i="h_d">Каждый день</span><b>08:00 — 23:00</b></div>
+        <div><span data-i="h_del">Доставка</span><b><a href="tel:+998933866712">93 386 67 12</a></b></div>
+      </div>
+    </div>
+    <div class="mapbox"><iframe id="map" title="map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+  </div>
+</div></section>
+
+<section class="contact"><div class="wrap reveal">
+  <div class="kicker" data-i="ct_k">Ждём в гости</div>
+  <h2 style="margin-top:22px" data-ih="ct_h">Топовый кофе<br><em>в твоём городе</em></h2>
+  <div class="cta">
+    <a class="btn" href="tel:+998777019711">☎ +998 77 701 97 11</a>
+    <a class="btn ghost" href="https://instagram.com/warumkaffee" target="_blank" rel="noopener">Instagram</a>
+    <a class="btn ghost" href="https://t.me/warumkaffee" target="_blank" rel="noopener">Telegram</a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <span>© Варим кофе, Ташкент</span>
+  <span data-i="foot">Сайт-концепт · меню и цены по данным @warumkaffee</span>
+</div></footer>
+
+<div id="cart"><div><span class="c" id="clist"></span><b id="ctot"></b></div>
+  <a class="btn" id="cgo" href="tel:+998933866712" data-i="c_go">Заказать</a><button class="x" id="cx" aria-label="clear">×</button></div>
+<div class="toast" id="toast"></div>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+/* ---------- data ---------- */
+const MENU={
+ coffee:{ru:"Кофе",uz:"Qahva",ic:"☕",bg:"#fff4c2",items:[
+  ["Эспрессо / Американо","Espresso / Amerikano",20],["Капучино / Латте","Kapuchino / Latte",30],
+  ["Флэт уайт","Flat white",35],["Раф","Raf",50],["Кофейный сидр","Qahvali sidr",35]],
+  extras:[["Альтернативное молоко","O'simlik suti",15],["Сироп","Sirop",10],["Шот эспрессо","Espresso shot",10]]},
+ ice:{ru:"Айс-кофе",uz:"Muzli qahva",ic:"🧊",bg:"#dff1ff",items:[
+  ["Айс-американо","Ice-Amerikano",35],["Айс-капучино / латте","Ice-kapuchino / latte",45],["Эспрессо-тоник","Espresso-tonik",50],
+  ["Шмель (апельсин, вишня, яблоко)","Shmel (apelsin, gilos, olma)",50],["Кофе по-хорезмски","Xorazmcha qahva",100],["Калифорнийский SWIFT","Kaliforniya SWIFT",50]]},
+ cold:{ru:"Холодные напитки",uz:"Sovuq ichimliklar",ic:"🍹",bg:"#ffe1e6",items:[
+  ["Айс-ти","Ice-tea",45],["Сен-Тропе","Sen-Trope",50],["Лимон-базилик","Limon-rayhon",40],["Грушевый","Nokli",60],
+  ["Персиковый","Shaftoli",50],["Клубника-личи","Qulupnay-lichi",50],["Манго-маракуйя","Mango-marakuya",50],["Тархун","Tarxun",40]]},
+ hot:{ru:"Не кофе",uz:"Issiq ichimliklar",ic:"🍵",bg:"#e6f5dc",items:[
+  ["Чёрный / зелёный чай","Qora / ko'k choy",15],["Горный чай","Tog' choyi",15],["Ягодный чай","Mevali choy",35],
+  ["Жасмин-алоэ","Jasmin-aloe",35],["Шиповник-земляника","Na'matak-qulupnay",35],["Какао","Kakao",40],["Кофейный глинтвейн","Qahvali glintveyn",40]],
+  extras:[["Мёд","Asal",10],["Лимон фреш","Limon fresh",10]]}
+};
+const PLACES=[
+ {ru:["ул. Бобура, 73Б","Флагман · пара столиков"],uz:["Bobur ko'chasi, 73B","Asosiy nuqta · bir nechta stol"],q:"41.2784499,69.2585797"},
+ {ru:["Парк «Голубые купола»","м. Космонавтов"],uz:["«Moviy gumbazlar» bog'i","Kosmonavtlar metrosi"],q:"Голубые купола парк Ташкент"},
+ {ru:["ул. Нукус, 31/2","Внутри Teplo Store"],uz:["Nukus ko'chasi, 31/2","Teplo Store ichida"],q:"Teplo Store Нукус 31/2 Ташкент"},
+ {ru:["Центральный парк им. Мирзо Улугбека","Кофе на прогулке"],uz:["Mirzo Ulug'bek nomidagi markaziy bog'","Sayr paytida qahva"],q:"Центральный парк Мирзо Улугбека Ташкент"}
+];
+const T={
+ ru:{nav_about:"О нас",nav_menu:"Меню",nav_lemon:"Лимонады",nav_places:"Адреса",nav_order:"Заказать",kicker:"Кофе 2GO · Ташкент",h1a:"Варим кофе.",h1b:"А чё не варить-то?",
+  lead:"Четыре точки в городе, где кофе варят для тебя с 8 утра. Пришёл, взял с собой и отправился покорять мир.",cta_menu:"Смотреть меню",cta_places:"Найти точку",chip_g:"Google Maps",chip_ig:"в Instagram",scroll:"листай",
+  about_k:"О нас",about_h:"Пара столиков. <em>Огромное</em> комьюнити.",about_p:"«Варим кофе» — это четыре точки формата 2GO. У нас всего пара столиков, но это не помешало нам собрать крутое комьюнити. Варим эспрессо, раф и айс-кофе, делаем авторские лимонады, печём хрустящие вафли — и ждём тебя в гости на топовый кофе в городе.",
+  st1:"точки в Ташкенте",st2:"варим каждый день",st3:"напитков в меню",st4:"рейтинг в Google",menu_k:"Меню",menu_h:"Что <em>варим</em> сегодня",add_t:"Добавки:",
+  lem_k:"Авторские лимонады",lem_h:"Хочется чего-то <em>холодненького?</em>",lem_p:"Груша, клубника-личи, манго-маракуйя, лимон-базилик — свои рецепты, много льда и ни капли скуки. А к ним — хрустящие вафли и ПП гранола.",
+  f1:"Хрустящие вафли",f2:"ПП гранола",f3:"Матча",g1:"Груша · 60k",g2:"Клубника-личи · 50k",g3:"Тархун · 40k",pl_k:"Адреса",pl_h:"4 точки в городе",h_d:"Каждый день",h_del:"Доставка",
+  ct_k:"Ждём в гости",ct_h:"Топовый кофе<br><em>в твоём городе</em>",foot:"Сайт-концепт · меню и цены по данным @warumkaffee",c_go:"Заказать",
+  open:"Сейчас открыто",closed:"Сейчас закрыто · с 08:00",sum:"сум",added:"Добавлено: ",copied:"Заказ скопирован — звоним!",
+  mq:["Кофе 2GO","Авторские лимонады","Хрустящие вафли","ПП гранола","Айс-кофе","Раф","Матча"]},
+ uz:{nav_about:"Biz haqimizda",nav_menu:"Menyu",nav_lemon:"Limonadlar",nav_places:"Manzillar",nav_order:"Buyurtma",kicker:"Qahva 2GO · Toshkent",h1a:"Qahva damlaymiz.",h1b:"Nega damlamaslik kerak?",
+  lead:"Shahardagi to'rtta nuqta — ertalab soat 8 dan siz uchun qahva damlaymiz. Keldingiz, oldingiz va dunyoni zabt etishga yo'l oldingiz.",cta_menu:"Menyuni ko'rish",cta_places:"Nuqtani topish",chip_g:"Google Maps",chip_ig:"Instagram'da",scroll:"pastga",
+  about_k:"Biz haqimizda",about_h:"Bir nechta stol. <em>Katta</em> jamoa.",about_p:"«Varim kofe» — 2GO formatidagi to'rtta nuqta. Stollarimiz oz, lekin bu bizga zo'r jamoa yig'ishga xalaqit bermadi. Espresso, raf va muzli qahva damlaymiz, mualliflik limonadlari tayyorlaymiz, qarsildoq vafli pishiramiz — shahardagi eng zo'r qahvaga mehmonga kuting!",
+  st1:"nuqta Toshkentda",st2:"har kuni ishlaymiz",st3:"ichimlik menyuda",st4:"Google reytingi",menu_k:"Menyu",menu_h:"Bugun nima <em>damlaymiz</em>",add_t:"Qo'shimchalar:",
+  lem_k:"Mualliflik limonadlari",lem_h:"Biror <em>salqin</em> narsa xohlaysizmi?",lem_p:"Nok, qulupnay-lichi, mango-marakuya, limon-rayhon — o'z retseptlarimiz, ko'p muz va zerikishga joy yo'q. Ularga qo'shib — qarsildoq vafli va PP granola.",
+  f1:"Qarsildoq vafli",f2:"PP granola",f3:"Matcha",g1:"Nokli · 60k",g2:"Qulupnay-lichi · 50k",g3:"Tarxun · 40k",pl_k:"Manzillar",pl_h:"Shaharda 4 ta nuqta",h_d:"Har kuni",h_del:"Yetkazib berish",
+  ct_k:"Mehmonga kuting",ct_h:"Eng zo'r qahva<br><em>sizning shahringizda</em>",foot:"Sayt-konsepsiya · menyu va narxlar @warumkaffee ma'lumotlari asosida",c_go:"Buyurtma",
+  open:"Hozir ochiq",closed:"Hozir yopiq · 08:00 dan",sum:"so'm",added:"Qo'shildi: ",copied:"Buyurtma nusxalandi — qo'ng'iroq qiling!",
+  mq:["Qahva 2GO","Mualliflik limonadlari","Qarsildoq vafli","PP granola","Muzli qahva","Raf","Matcha"]}
+};
+let L=localStorage.getItem('vk_lang')||'ru', TAB='coffee', PL=0; const cart=[];
+const fmt=n=>(n*1000).toLocaleString('ru-RU');
+
+function applyLang(){
+ document.documentElement.lang=L;
+ document.querySelectorAll('[data-i]').forEach(e=>{const v=T[L][e.dataset.i];if(v!=null)e.textContent=v});
+ document.querySelectorAll('[data-ih]').forEach(e=>{const v=T[L][e.dataset.ih];if(v!=null)e.innerHTML=v});
+ document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+ const m=T[L].mq.map(s=>`<span>${s}</span>`).join('');document.getElementById('mq').innerHTML=m+m;
+ renderTabs();renderMenu(false);renderPlaces();status();drawCart();
+}
+function renderTabs(){document.getElementById('tabs').innerHTML=Object.entries(MENU).map(([k,v])=>`<button data-t="${k}" class="${k===TAB?'on':''}">${v.ic} ${v[L]}</button>`).join('');
+ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{TAB=b.dataset.t;renderTabs();renderMenu(true)})}
+function renderMenu(anim){const c=MENU[TAB];
+ document.getElementById('mgrid').innerHTML=c.items.map((it,i)=>`<div class="mcard ${anim?'anim':''}" style="animation-delay:${i*60}ms">
+  <div class="ic" style="background:${c.bg}">${c.ic}</div><h3>${L==='ru'?it[0]:it[1]}</h3>
+  <div class="p"><div><b>${it[2]}k</b> <small>${T[L].sum}</small></div><button class="add" data-i2="${i}" aria-label="add">+</button></div></div>`).join('');
+ document.getElementById('extras').innerHTML=c.extras?`<span class="t">${T[L].add_t}</span>`+c.extras.map(x=>`<span>+ ${L==='ru'?x[0]:x[1]}<b>${x[2]}k</b></span>`).join(''):'';
+ document.querySelectorAll('.mcard').forEach(card=>{
+  card.onmousemove=e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(900px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`};
+  card.onmouseleave=()=>card.style.transform='';
+ });
+ document.querySelectorAll('.add').forEach(b=>b.onclick=()=>{const it=c.items[+b.dataset.i2];cart.push({ru:it[0],uz:it[1],p:it[2]});drawCart();toast(T[L].added+(L==='ru'?it[0]:it[1]));window.__burst&&window.__burst()});
+}
+function renderPlaces(){document.getElementById('plist').innerHTML=PLACES.map((p,i)=>`<div class="place ${i===PL?'on':''}" data-p="${i}"><div class="n">0${i+1}</div><div><h3>${p[L][0]}</h3><p>${p[L][1]}</p></div></div>`).join('');
+ document.querySelectorAll('.place').forEach(e=>e.onclick=()=>{PL=+e.dataset.p;renderPlaces()});
+ const f=document.getElementById('map'),src='https://maps.google.com/maps?q='+encodeURIComponent(PLACES[PL].q)+'&z=15&hl='+L+'&output=embed';if(f.src!==src)f.src=src}
+function status(){const n=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tashkent'}));const h=n.getHours();const o=h>=8&&h<23;
+ document.getElementById('open').textContent=o?T[L].open:T[L].closed;document.getElementById('odot').classList.toggle('off',!o)}
+function drawCart(){const c=document.getElementById('cart');if(!cart.length){c.classList.remove('show');return}
+ document.getElementById('clist').textContent=cart.map(i=>i[L]).join(', ');document.getElementById('ctot').textContent=fmt(cart.reduce((s,i)=>s+i.p,0))+' '+T[L].sum;c.classList.add('show')}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1600)}
+document.getElementById('cx').onclick=()=>{cart.length=0;drawCart()};
+document.getElementById('cgo').onclick=()=>{try{navigator.clipboard.writeText('Заказ: '+cart.map(i=>i.ru).join(', '))}catch(e){}toast(T[L].copied)};
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{L=b.dataset.l;localStorage.setItem('vk_lang',L);applyLang()});
+addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40),{passive:true});
+applyLang();setInterval(status,60000);
+
+/* reveal + counters */
+gsap.registerPlugin(ScrollTrigger);
+document.querySelectorAll('.reveal').forEach(el=>gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}}));
+document.querySelectorAll('[data-count]').forEach(el=>{const o={v:0};gsap.to(o,{v:+el.dataset.count,duration:1.6,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 90%'},onUpdate:()=>el.textContent=Math.round(o.v)+(el.dataset.dec?'+':'')})});
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+
+const bar=document.getElementById('lbar');bar.style.width='40%';
+const canvas=document.getElementById('scene');
+const mobile=innerWidth<900;
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.5:2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);camera.position.set(0,0,9);
+const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),.04).texture;
+
+scene.add(new THREE.AmbientLight(0xffffff,.35));
+const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(4,5,6);scene.add(key);
+const rim=new THREE.PointLight(0xFFD400,40,20);rim.position.set(-4,1,-2);scene.add(rim);
+
+/* --- sleeve texture: logo drawn on canvas --- */
+function sleeveTex(){const c=document.createElement('canvas');c.width=2048;c.height=512;const g=c.getContext('2d');
+ g.fillStyle='#FFD400';g.fillRect(0,0,2048,512);
+ for(const cx of [512,1536]){
+  g.fillStyle='#111';g.beginPath();g.arc(cx,256,190,0,Math.PI*2);g.fill();
+  g.save();g.beginPath();g.arc(cx,256,176,0,Math.PI*2);g.clip();
+  g.fillStyle='#FFD400';g.fillRect(cx-200,56,400,260);g.fillStyle='#111';g.fillRect(cx-200,316,400,140);
+  g.font='900 180px "Arial Black",Arial';g.textAlign='center';g.fillStyle='#111';g.fillText('B',cx,290);
+  g.font='900 46px "Arial Black",Arial';g.fillStyle='#fff';g.fillText('ВАРИМ',cx,372);g.fillText('КОФЕ',cx,420);g.restore();
+ }
+ g.fillStyle='#111';g.font='900 40px "Arial Black",Arial';g.textAlign='center';
+ g.fillText('КОФЕ 2GO · ТАШКЕНТ',1024,270);g.fillText('А ЧЁ НЕ ВАРИТЬ-ТО?',0,270);g.fillText('А ЧЁ НЕ ВАРИТЬ-ТО?',2048,270);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t}
+
+/* --- cup --- */
+const cup=new THREE.Group();
+const prof=[];for(let i=0;i<=30;i++){const y=-1.5+i*0.1;prof.push(new THREE.Vector2(0.78+(y+1.5)/3*0.32,y))}
+prof.unshift(new THREE.Vector2(0,-1.5));
+const paper=new THREE.MeshPhysicalMaterial({color:0xd9b98c,roughness:.75,clearcoat:.2});
+cup.add(new THREE.Mesh(new THREE.LatheGeometry(prof,96),paper));
+const sp=[];for(let i=0;i<=12;i++){const y=-.75+i*.125;sp.push(new THREE.Vector2(0.78+(y+1.5)/3*0.32+.025,y))}
+const sleeve=new THREE.Mesh(new THREE.LatheGeometry(sp,128),new THREE.MeshPhysicalMaterial({map:sleeveTex(),roughness:.45,clearcoat:.6,clearcoatRoughness:.3}));
+sleeve.rotation.y=-Math.PI/2;cup.add(sleeve);
+const lidM=new THREE.MeshPhysicalMaterial({color:0x151515,roughness:.35,clearcoat:.8});
+const lid1=new THREE.Mesh(new THREE.CylinderGeometry(1.14,1.14,.16,96),lidM);lid1.position.y=1.55;cup.add(lid1);
+const lid2=new THREE.Mesh(new THREE.CylinderGeometry(.98,1.1,.2,96),lidM);lid2.position.y=1.72;cup.add(lid2);
+const sip=new THREE.Mesh(new THREE.BoxGeometry(.38,.06,.14),new THREE.MeshStandardMaterial({color:0x000}));sip.position.set(0,1.83,.6);cup.add(sip);
+scene.add(cup);
+
+/* --- steam --- */
+function soft(){const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(255,255,255,.55)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)}
+const sTex=soft();const steam=[];
+for(let i=0;i<14;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:sTex,transparent:true,depthWrite:false,opacity:0}));s.userData.t=Math.random();cup.add(s);steam.push(s)}
+
+/* --- beans --- */
+const beanG=new THREE.SphereGeometry(.16,24,16);beanG.scale(1,.72,1.38);
+{const p=beanG.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);if(y>0)p.setY(i,y-Math.exp(-x*x*900)*.05)}beanG.computeVertexNormals()}
+const beanM=new THREE.MeshPhysicalMaterial({color:0x4a2a17,roughness:.35,clearcoat:.7});
+const N=mobile?22:40;const beans=new THREE.InstancedMesh(beanG,beanM,N);scene.add(beans);
+const bd=[];for(let i=0;i<N;i++)bd.push({r:1.9+Math.random()*(mobile?1.6:2.2),a:Math.random()*Math.PI*2,y:(Math.random()-.5)*5,s:.15+Math.random()*.25,rx:Math.random()*6,ry:Math.random()*6,sc:.7+Math.random()*.7,z:(Math.random()-.5)*2});
+const dm=new THREE.Object3D();
+
+/* burst when item added */
+let burst=0;window.__burst=()=>{burst=1};
+
+/* scroll choreography */
+const st={x:mobile?0:2.75,y:mobile?1.55:-.1,rz:-.18,s:mobile?.55:.95,spin:0};
+gsap.timeline({scrollTrigger:{trigger:'#about',start:'top bottom',end:'bottom center',scrub:1.2}})
+ .to(st,{x:mobile?0:-3.1,y:mobile?1.9:-.2,rz:.22,spin:Math.PI*2,s:mobile?.5:.95,ease:'none'});
+gsap.timeline({scrollTrigger:{trigger:'#menu',start:'top bottom',end:'top top',scrub:1}})
+ .to(st,{y:5.5,s:.6,spin:Math.PI*3.2,ease:'none'});
+
+let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+
+const clock=new THREE.Clock();let intro=0;
+function tick(){const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.05);
+ intro=Math.min(1,intro+0.012);const e=1-Math.pow(1-intro,3);
+ cup.position.set(st.x+mx*.3,st.y+Math.sin(t*1.2)*.08-(1-e)*4,0);
+ cup.rotation.set(-.05+my*.15,t*.35+st.spin+mx*.5,st.rz);
+ cup.scale.setScalar(st.s*(.6+.4*e));
+ steam.forEach((s,i)=>{s.userData.t+=.004+i*.0002;const k=s.userData.t%1;s.position.set(Math.sin(k*6+i)*.25,1.9+k*2.2,Math.cos(i)*.2);s.scale.setScalar(.5+k*1.4);s.material.opacity=Math.sin(k*Math.PI)*.35});
+ burst*=.94;
+ bd.forEach((b,i)=>{const a=b.a+t*b.s*.4;const rr=b.r+burst*2;dm.position.set(cup.position.x*.85+Math.cos(a)*rr,b.y+Math.sin(t*b.s+i)*.3+cup.position.y*.25,Math.sin(a)*rr*.5+b.z-1);dm.rotation.set(b.rx+t*b.s,b.ry+t*b.s*.7,0);dm.scale.setScalar(b.sc*e);dm.updateMatrix();beans.setMatrixAt(i,dm.matrix)});
+ beans.instanceMatrix.needsUpdate=true;
+ renderer.render(scene,camera);requestAnimationFrame(tick)}
+bar.style.width='100%';
+document.fonts.ready.then(()=>{sleeve.material.map=sleeveTex();setTimeout(()=>document.getElementById('loader').classList.add('done'),350);tick()});
+</script>
+</body>
+</html>
